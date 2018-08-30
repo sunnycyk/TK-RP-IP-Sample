@@ -25,7 +25,7 @@ let callback = async(req, res) => {
     return
   }
 
-  if (!resp) {
+  if (!token) {
     res.status(403).send(invalidReq)
     return
   }
@@ -41,10 +41,12 @@ let callback = async(req, res) => {
       publicKey: publicKey
     })
   } catch (e) {
+    console.error(e)
     res.status(500).send("Internal Server Error")
   }
 }
 
+router.get("/", (req, res) => res.redirect("/login"))
 router.get("/login/:login_hint?", login)
 router.get(config.callbackRoute, callback)
 

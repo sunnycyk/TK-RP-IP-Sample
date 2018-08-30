@@ -1,9 +1,11 @@
-const IssuerService = require('trustedkey-js/services/claimissuerservice')
+const IssuerService = require(
+  'trustedkey-js/services/trustedkeyissuerservice')
 const OIDs = require('trustedkey-js/oid')
 const config = require("../config")
 
 const url = config.issuerServiceUrl
-const issuerService = IssuerService(url, config.clientId, config.clientSecret)
+const issuerService = new IssuerService(url,
+  config.clientId, config.clientSecret)
 
 let getAttrs = values => {
   return Object.keys(values).reduce((dict, claim) => {
@@ -28,4 +30,4 @@ var issue = (publicKey, values) => {
   })
 }
 
-module.exports = issue
+module.exports.issue = issue
