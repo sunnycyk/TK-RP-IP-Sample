@@ -5,7 +5,7 @@
   "walletServiceUrl": "https://wallet.trustedkey.com",
   "callbackRoute": "/oauth/callback",
   "clientId": "8ac9e443-14c2-4965-b526-0dfaa3541fe5",
-  "clientSecret": "8ac9e443-14c2-4965-b526-0dfaa3541fe5",
+  "clientSecret": "pk4Lx6h3VhcmCgTvzqGkFhtNIs5cBYlOA1CfNiaTNC0",
   "claims": ["https://auth.trustedkey.com/publicKey"],
   "port": 8080,
   "expiryYears": 10
