@@ -21,7 +21,6 @@ let callback = async(req, res) => {
   try {
     token = await tkOAuth.getCallbackToken(req.originalUrl)
   } catch (e) {
-    console.error(e)
     res.status(403).send(invalidReq)
     return
   }
@@ -43,7 +42,7 @@ let callback = async(req, res) => {
     })
   } catch (e) {
     console.error(e)
-    res.status(500).send("Internal Server Error")
+    res.status(500).send("Could not issue claims :(")
   }
 }
 
