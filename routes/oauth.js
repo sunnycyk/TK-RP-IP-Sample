@@ -21,6 +21,7 @@ let callback = async(req, res) => {
   try {
     token = await tkOAuth.getCallbackToken(req.originalUrl)
   } catch (e) {
+    console.error(e)
     res.status(403).send(invalidReq)
     return
   }
