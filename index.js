@@ -4,6 +4,8 @@ const bodyParser = require("body-parser")
 const router = require("./routes/main")
 const config = require("./config")
 
+const port = process.env.PORT || config.port;
+
 var app = express()
 app.use(cors())
 app.use(bodyParser.json())
@@ -12,6 +14,6 @@ app.use(bodyParser.urlencoded({
 }))
 app.use("/", router)
 
-app.listen(config.port, () => {
-  console.log("Server listening on port: " + config.port)
+app.listen(port, () => {
+  console.log("Server listening on port: " + port)
 })
