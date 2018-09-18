@@ -30,22 +30,20 @@ let callback = async(req, res) => {
     return
   }
 
-  res.send("testing unexpected res")
-
-  // try {
-  //   let publicKey = token[config.claims[0]]
-  //   const claimValues = {
-  //     surname: "Bob Smith",
-  //     organization: "Acme Inc"
-  //   }
-  //   await tkIssuing.issue(publicKey, claimValues)
-  //   res.json({
-  //     publicKey: publicKey
-  //   })
-  // } catch (e) {
-  //   console.error(e)
-  //   res.status(500).send("Could not issue claims :(")
-  // }
+  try {
+    let publicKey = token[config.claims[0]]
+    const claimValues = {
+      surname: "Bob Smith",
+      organization: "Acme Inc"
+    }
+    await tkIssuing.issue(publicKey, claimValues)
+    res.json({
+      publicKey: publicKey
+    })
+  } catch (e) {
+    console.error(e)
+    res.status(500).send("Could not issue claims :(")
+  }
 }
 
 router.get("/", (req, res) => res.redirect("/login"))

@@ -5,7 +5,6 @@ const rp = require("request-promise-native")
 const config = require("../config")
 
 const claims = config.claims
-const namespace = config.namespace
 const oauthClient = new ClientOAuth2({
   clientId: config.clientId,
   clientSecret: config.clientSecret,

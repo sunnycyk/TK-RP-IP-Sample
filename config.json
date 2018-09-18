@@ -1,11 +1,10 @@
 {
-  "host": "https://tk-test-app-2.herokuapp.com",
-  "namespace": "https://auth.trustedkey.com/",
+  "host": "https://yourhost.com",
   "issuerServiceUrl": "https://issuer.trustedkey.com",
   "walletServiceUrl": "https://wallet.trustedkey.com",
   "callbackRoute": "/oauth/callback",
-  "clientId": "8ac9e443-14c2-4965-b526-0dfaa3541fe5",
-  "clientSecret": "pk4Lx6h3VhcmCgTvzqGkFhtNIs5cBYlOA1CfNiaTNC0",
+  "clientId": "COPY AND PASTE YOUR CLIENT ID HERE",
+  "clientSecret": "COPY AND PASTE YOUR CLIENT SECRET HERE",
   "claims": ["https://auth.trustedkey.com/publicKey"],
   "port": 8080,
   "expiryYears": 10
