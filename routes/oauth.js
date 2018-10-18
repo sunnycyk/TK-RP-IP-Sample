@@ -52,10 +52,11 @@ let callback = async(req, res) => {
     let publicKey = token[config.claims[0]]
     console.log("Got Public key: ", publicKey)
     const claimValues = {
+      name: "Bob A. Smith",
       given_name: "Bob",
       family_name: "Smith",
-      gender: "male",
-      birthdate: "2000-01-01"
+      gender: "Male",
+      birthdate: "20180101000000Z"
     }
     await tkIssuing.issue(publicKey, claimValues)
     res.send("<p>Claims were issued!</p>" + tokenMSG)
