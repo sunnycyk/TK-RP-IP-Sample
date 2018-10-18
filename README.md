@@ -1,5 +1,7 @@
 # TK-RP-IP-Sample
 
+*Note*: to enable issuing features, you will need to submit a feature request on developer.trustedkey.com for issuing
+
 ### Instructions for Local Dev
 
 1. Clone repo
