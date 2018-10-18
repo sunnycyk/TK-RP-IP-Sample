@@ -4,8 +4,9 @@ const OIDs = require('trustedkey-js/oid')
 const config = require("../config")
 
 const url = config.issuerServiceUrl
-const issuerService = new IssuerService(url,
-  config.clientId, config.clientSecret)
+const clientId = process.env.CLIENTID || config.clientId
+const clientSecret = process.env.CLIENTSECRET || config.clientSecret
+const issuerService = new IssuerService(url, clientId, clientSecret)
 
 let getAttrs = values => {
   return Object.keys(values).reduce((dict, claim) => {
