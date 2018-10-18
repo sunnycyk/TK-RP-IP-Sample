@@ -1,0 +1,12 @@
+<html>
+    <script>
+    function doFlow(flow) {
+        var email = document.getElementById("email").value
+        window.location.href = "/" + flow + "?login_hint=" + email.trim()
+    }
+    </script>
+    <input type="email" placeholder="Email" id="email">
+    <button type="button" onclick="doFlow('login')">Login</button>
+    <button type="button" onclick="doFlow('register')">Register</button>
+    <button type="button" onclick="doFlow('issue')">Issue</button>
+</html>

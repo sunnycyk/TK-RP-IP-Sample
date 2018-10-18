@@ -6,7 +6,16 @@ const config = require("../config")
 const invalidAuth = "Invalid authentication information"
 const invalidReq = "Invalid wallet request"
 
-let login = (req, res) => res.redirect(tkOAuth.getAuthUri(req.query))
+const clients = {
+  "login": tkOAuth.genOauthClient(["openid"], "login"),
+  "register": tkOAuth.genOauthClient(["openid", "profile"], "register"),
+  "issue": tkOAuth.genOauthClient(["openid"], "issue")
+}
+
+let genRoute = flow => (req, res) => {
+  let useClaims = flow == "issue"
+  return res.redirect(tkOAuth.getAuthUri(clients[flow], req.query, useClaims))
+}
 
 let callback = async(req, res) => {
   let err = req.query.error
@@ -19,13 +28,15 @@ let callback = async(req, res) => {
 
   let token = null
   try {
-    token = await tkOAuth.getCallbackToken(req.originalUrl)
+    token = await tkOAuth.getCallbackToken(clients[state], req.originalUrl)
   } catch (e) {
+    console.error(e.message)
     res.status(403).send(invalidReq)
     return
   }
 
   if (!token) {
+    console.error("No token was received")
     res.status(403).send(invalidReq)
     return
   }
@@ -48,8 +59,9 @@ let callback = async(req, res) => {
   }
 }
 
-router.get("/", (req, res) => res.redirect("/login"))
-router.get("/login/:login_hint?", login)
+router.get("/login/:login_hint?", genRoute("login"))
+router.get("/register/:login_hint?", genRoute("register"))
+router.get("/issue/:login_hint?", genRoute("issue"))
 router.get(config.callbackRoute, callback)
 
 module.exports = router
