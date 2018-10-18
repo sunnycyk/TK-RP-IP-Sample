@@ -4,12 +4,15 @@ const rp = require("request-promise-native")
 const config = require("../config")
 
 const claims = config.claims
+const host = process.env.HOST || config.host
+const clientId = process.env.CLIENTID || config.clientId
+const clientSecret = process.env.CLIENTSECRET || config.clientSecret
 const oauthClient = new ClientOAuth2({
-  clientId: config.clientId,
-  clientSecret: config.clientSecret,
+  clientId: clientId,
+  clientSecret: clientSecret,
   accessTokenUri: Url.resolve(config.walletServiceUrl, '/oauth/token'),
   authorizationUri: Url.resolve(config.walletServiceUrl, '/oauth/authorize'),
-  redirectUri: Url.resolve(config.host, config.callbackRoute),
+  redirectUri: Url.resolve(host, config.callbackRoute),
   scopes: ["openid"],
   state: "login"
 })
