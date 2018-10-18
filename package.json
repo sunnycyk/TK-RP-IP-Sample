@@ -1,0 +1,21 @@
+{
+  "name": "boilerplate-issuer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Krishnan Rajiyah",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "client-oauth2": "^4.1.0",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "request": "^2.83.0",
+    "request-promise-native": "^1.0.5",
+    "trustedkey-js": "^0.3.17",
+    "url": "^0.11.0"
+  }
+}
