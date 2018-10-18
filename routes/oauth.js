@@ -41,18 +41,22 @@ let callback = async(req, res) => {
     return
   }
 
+  let tokenMSG = `
+    <p>Token:</p>
+    <pre>${JSON.stringify(token, null, 2)}</pre>
+    <br />
+    <p><a href='/'>Home</a></p>
+  `
+  if (state != "issue") return res.send(tokenMSG)
   try {
     let publicKey = token[config.claims[0]]
     console.log("Got Public key: ", publicKey)
     const claimValues = {
-      surname: "Bob Smith",
+      surname: "Smith",
       organization: "Acme Inc"
     }
     await tkIssuing.issue(publicKey, claimValues)
-    res.json({
-      claimsIssued: claimValues,
-      publicKey: publicKey
-    })
+    res.send("<p>Claims were issued!</p>" + tokenMSG)
   } catch (e) {
     console.error(e.message)
     res.status(500).send("Internal Server Error")
