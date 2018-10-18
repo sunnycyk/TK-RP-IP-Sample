@@ -21,5 +21,5 @@
 
 1. *Changing scopes*: adjust routes/oauth.js line 10, 11, or 12
 2. *Changing claims requested*: adjust config.json "claims" key
-3. *Changing claims issued*: adjust routes/oauth.js line 54-57
+3. *Changing claims issued*: adjust routes/oauth.js line 54-59
 4. *Changing look and feel*: adjust public/index.html
