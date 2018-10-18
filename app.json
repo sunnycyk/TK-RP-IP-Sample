@@ -1,5 +1,5 @@
 {
-  "name": "Trusted Key Relying Party/Issuing Party Sample",
+  "name": "Relying/Issuing Party Sample",
   "description": "A barebones Node.js app for requesting user's public key and issuing basic claims",
   "repository": "https://github.com/trustedkey/TK-RP-IP-Sample",
   "logo": "https://www.trustedkey.com/wp-content/uploads/2017/02/Trusted-Key-Logo-e1511773113277.png",
