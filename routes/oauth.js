@@ -32,16 +32,18 @@ let callback = async(req, res) => {
 
   try {
     let publicKey = token[config.claims[0]]
+    console.log("Got Public key: ", publicKey)
     const claimValues = {
       surname: "Bob Smith",
       organization: "Acme Inc"
     }
     await tkIssuing.issue(publicKey, claimValues)
     res.json({
+      claimsIssued: claimValues,
       publicKey: publicKey
     })
   } catch (e) {
-    console.error(e)
+    console.error(e.message)
     res.status(500).send("Internal Server Error")
   }
 }
