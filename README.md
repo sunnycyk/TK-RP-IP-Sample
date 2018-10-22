@@ -16,6 +16,13 @@
 3. Add CLIENTID config var (get this from developer.trustedkey.com)
 4. Add CLIENTSECRET config var (get this from developer.trustedkey.com)
 
+### One-time Instructions for enabling editing for Heroku App (after using deploy button)
+0. heroku login
+1. heroku git:clone -a <APP_NAME>
+2. git remote add origin ...
+3. git pull origin master
+
+Now you can make changes and push using `git push heroku master`
 
 ### Customization Guide
 
