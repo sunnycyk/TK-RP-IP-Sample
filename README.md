@@ -2,7 +2,7 @@
 
 *Note*: to enable issuing features, you will need to submit a feature request on developer.trustedkey.com for issuing
 
-*Note*: config.json is meant for local development only. For example, if you choose to deploy to heroku, the environment variables set in config vars section of your heroku app will override the values in config.json
+*Note*: config.json is meant for local development only. Environment variables will override these values (see util files' constant declarations) For example, if you choose to deploy to heroku, the environment variables set in config vars section of your heroku app will override the values in config.json
 
 ### Instructions for Local Dev
 
