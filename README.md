@@ -19,7 +19,7 @@
 ### One-time Instructions for enabling editing for Heroku App (after using deploy button)
 0. heroku login
 1. heroku git:clone -a <APP_NAME>
-2. git remote add origin ...
+2. git remote add origin https://github.com/trustedkey/TK-RP-IP-Sample
 3. git pull origin master
 
 Now you can make changes and push using `git push heroku master`
