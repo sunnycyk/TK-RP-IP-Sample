@@ -26,6 +26,14 @@
 
 Now you can make changes and push using `git push heroku master`
 
+### Instructions for Manual AWS Deployment
+
+1. Clone this repo
+2. Edit config.json with credentials from developer.trustedkey.com
+3. Create Elastic Beanstalk service on AWS
+4. Set Node version to 8+
+5. Upload & Deploy the code to the elastic beanstalk instance dashboard
+
 ### Customization Guide
 
 1. *Changing scopes*: adjust routes/oauth.js line 10, 11, or 12
