@@ -32,7 +32,8 @@ Now you can make changes and push using `git push heroku master`
 2. Edit config.json with credentials from developer.trustedkey.com
 3. Create Elastic Beanstalk service on AWS
 4. Set Node version to 8+
-5. Upload & Deploy the code to the elastic beanstalk instance dashboard
+5. Set start command to `npm start`
+6. Upload & Deploy the code to the elastic beanstalk instance dashboard
 
 ### Customization Guide
 
