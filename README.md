@@ -37,6 +37,7 @@ Now you can make changes and push using `git push heroku master`
 7. Upload a zip archive of your cloned repo with the edited config.json inside
 8. Configure Additional Options > Software > Set Node version to 8+ and command to `npm start` > Save
 9. Click create environment
+10. Wait 5-10mins for deployment to complete
 
 ### Customization Guide
 
