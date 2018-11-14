@@ -62,7 +62,8 @@ let callback = async(req, res) => {
     res.send("<p>Claims were issued!</p>" + tokenMSG)
   } catch (e) {
     console.error(e.message)
-    res.status(500).send("Internal Server Error")
+    const msg = "Error: Could not issue claims. If you do not have any internal syntax errors, then please ensure you have requested issuing features on devportal"
+    res.status(500).send(msg)
   }
 }
 
