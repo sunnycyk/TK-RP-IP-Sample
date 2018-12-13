@@ -56,7 +56,8 @@ let callback = async(req, res) => {
       given_name: "Bob",
       family_name: "Smith",
       gender: "Male",
-      birthdate: "120101000000Z"
+      birthdate: "120101000000Z",
+      "https://auth.trustedkey.com/documentID": "X1234567"
     }
     await tkIssuing.issue(publicKey, claimValues)
     res.send("<p>Claims were issued!</p>" + tokenMSG)
