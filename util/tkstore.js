@@ -31,7 +31,7 @@ module.exports = {
     return this.claims
   },
   validateClaims: function(claimSerialNumber) {
-    const serialNo = /^0x/.test(claimSerialNumber) ? claimSerialNumber.substring(2) : claimSerialNumber
+    const serialNo = claimSerialNumber.replace('0x', '')
     return validateService.validateClaims([serialNo])
   }
 }
