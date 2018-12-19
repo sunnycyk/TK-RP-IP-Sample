@@ -15,7 +15,8 @@
     "express": "^4.16.2",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
-    "trustedkey-js": "^0.3.17",
-    "url": "^0.11.0"
+    "trustedkey-js": "^0.4.3",
+    "url": "^0.11.0",
+    "uuid": "^3.1.0"
   }
 }
