@@ -2,6 +2,7 @@ const router = require("express").Router()
 const tkOAuth = require("../util/tkoauth")
 const tkIssuing = require("../util/tkissuing")
 const config = require("../config")
+const Utils = require("trustedkey-js/utils")
 
 const invalidAuth = "Invalid authentication information"
 const invalidReq = "Invalid wallet request"
@@ -59,13 +60,29 @@ let callback = async(req, res) => {
       birthdate: "120101000000Z",
       "https://auth.trustedkey.com/documentID": "X1234567"
     }
-    await tkIssuing.issue(publicKey, claimValues)
+    const status = await tkIssuing.issue(publicKey, claimValues)
+    // get Claim
+    if (status === true) {
+      while (true) {
+        try {
+          const pems = await tkIssuing.getClaims(publicKey)
+          tkIssuing.storeClaim(pems) // store claim
+          break
+        } catch (err) {
+          if (err.message !== 'The operation is pending.') {
+            throw err
+          }
+        }
+      }
+    }
+
     res.send("<p>Claims were issued!</p>" + tokenMSG)
   } catch (e) {
     console.error(e.message)
     const msg = "Error: Could not issue claims. If you do not have any internal syntax errors, then please ensure you have requested issuing features on devportal"
     res.status(500).send(msg)
   }
+
 }
 
 router.get("/login/:login_hint?", genRoute("login"))

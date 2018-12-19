@@ -1,12 +1,77 @@
 <html>
-    <script>
-    function doFlow(flow) {
-        var email = document.getElementById("email").value
-        window.location.href = "/" + flow + "?login_hint=" + email.trim()
+    <style>
+    table {
+        border: 1px solid #aaaaaa;
+        margin-top: 2px;
     }
-    </script>
+    table td {
+        border-left: 1px solid #aaaaaa;
+        border-top: 1px solid #aaaaaa;
+        font-size: 12px;
+        text-align: center;
+        width: 120px;
+        padding: 2px 0px;
+    }
+    </style>
     <input type="email" placeholder="Email" id="email">
     <button type="button" onclick="doFlow('login')">Login</button>
     <button type="button" onclick="doFlow('register')">Register</button>
     <button type="button" onclick="doFlow('issue')">Issue</button>
+    <div id="claims">
+        <table>
+            <thead>
+                <tr>
+                    <td>Serial Number</td>
+                    <td>Revoke</td>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function doFlow(flow) {
+            var email = document.getElementById("email").value
+            window.location.href = "/" + flow + "?login_hint=" + email.trim()
+        }
+
+        function _tr() {
+            return document.createElement('tr')
+        }
+
+        function _td(text) {
+            var td = document.createElement('td')
+            var td_text = document.createTextNode(text)
+            td.appendChild(td_text)
+            return td
+        }
+
+        function _tdRevokeButton(serialNumber) {
+            var td = document.createElement('td')
+            var btn = document.createElement('button')
+            var btn_label = document.createTextNode('Revoke')
+            btn.appendChild(btn_label)
+            btn.onclick = (event) => {
+                window.location.href = `/revoke?address=${serialNumber}`
+            }
+            td.appendChild(btn)
+            return td
+        }
+        // Get claims from server
+        var claimsDiv = document.getElementById("claims")
+        var tbody = claimsDiv.childNodes[1].childNodes[3]
+        var xhr = new XMLHttpRequest()
+        xhr.onload = function() {
+            var json = JSON.parse(xhr.responseText)
+            json.map(claim => {
+                var tr = _tr()
+                tr.appendChild(_td(claim))
+                tr.appendChild(_tdRevokeButton(claim))
+                tbody.appendChild(tr)
+            })
+        }
+        xhr.open("GET", "/listClaims")
+        xhr.responseType = "text"
+        xhr.send()
+    </script>
 </html>
