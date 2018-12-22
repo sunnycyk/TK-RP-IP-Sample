@@ -33,7 +33,10 @@ var getClaims = (publicKey) => {
 }
 
 var storeClaim = (pems) => {
-  tkStore.storeClaim(pems[0])
+  // last pems is issuer
+  pems.slice(0, -1).map(pem => {
+    tkStore.storeClaim(pem)
+  });
 }
 
 var revoke = (claimId) => {
