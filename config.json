@@ -1,7 +1,7 @@
 {
   "host": "http://localhost:8080",
-  "issuerServiceUrl": "https://issuer.trustedkey.com",
-  "walletServiceUrl": "https://wallet.trustedkey.com",
+  "issuerServiceUrl": "https://issuer-stg.trustedkey.com",
+  "walletServiceUrl": "https://wallet-stg.trustedkey.com",
   "callbackRoute": "/oauth/callback",
   "clientId": "GET CLIENT ID FROM DEVPORTAL",
   "clientSecret": "GET CLIENT SECRET FROM DEVPORTAL",
