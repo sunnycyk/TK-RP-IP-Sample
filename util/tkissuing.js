@@ -40,11 +40,7 @@ var storeClaim = (pems) => {
 }
 
 var revoke = (claimId) => {
-  // FIXME: should call revokeClaim when new backend is deployed
-  return credentialRegistryService.httpClient.post('revoke', {
-    address: claimId,
-    pubkey: 'dummypubkey'
-  })
+  return credentialRegistryService.revokeClaim(claimId)
 }
 
 module.exports.issue = issue
