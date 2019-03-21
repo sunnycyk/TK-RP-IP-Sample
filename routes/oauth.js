@@ -99,7 +99,7 @@ let callback = async(req, res) => {
         family_name: "Smith",
         gender: "Male",
         birthdate: "120101000000Z",
-        phone_number: {endpoint: Url.resolve(Host, '/claimdetails'), loa: 2.0},
+        // phone_number: {endpoint: Url.resolve(Host, '/claimdetails'), loa: 2.0},
         "https://auth.trustedkey.com/documentID": "X1234567"
       }
 
