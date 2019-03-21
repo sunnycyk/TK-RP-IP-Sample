@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "lint": "eslint --max-warnings 0 --color ."
+  },
+  "engines": {
+    "node": ">=10.9.0"
   },
   "author": "Krishnan Rajiyah",
   "license": "ISC",
@@ -15,8 +19,68 @@
     "express": "^4.16.2",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
-    "trustedkey-js": "^0.4.4",
+    "trustedkey-js": "^0.6.7",
     "url": "^0.11.0",
-    "uuid": "^3.1.0"
+    "uuid": "^3.1.0",
+    "jsonwebtoken": "^8.5.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "npm": "^6.4.0",
+    "eslint": "^5.6.0",
+    "eslint-config-prettier": "^3.1.0",
+    "eslint-import-resolver-node": "^0.3.2",
+    "eslint-plugin-disable": "^1.0.2",
+    "eslint-plugin-hapi": "^4.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-mocha": "^5.2.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-prettier": "^2.7.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-security": "^1.4.0",
+    "prettier": "^1.14.2"
+  },
+  "prettier": {
+    "printWidth": 120,
+    "semi": false,
+    "tabWidth": 2,
+    "singleQuote": true,
+    "bracketSpacing": false
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true
+    },    
+    "rules": {
+      "camelcase": [
+        "off"
+      ],
+      "no-console": [
+        "error"
+      ],
+      "no-unused-vars": [
+        "error"
+      ],
+      "security/detect-non-literal-fs-filename": [
+        "off"
+      ],
+      "valid-jsdoc": [
+        "error"
+      ]
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:security/recommended",
+      "plugin:prettier/recommended",
+      "plugin:import/errors"
+    ],
+    "plugins": [
+      "security",
+      "import"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2019
+    }
   }
 }
