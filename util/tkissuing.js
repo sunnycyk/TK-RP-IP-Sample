@@ -105,7 +105,7 @@ tkissuing.revoke = (claimId) => {
 
 tkissuing.fetchDistributedClaimValue = async (claimSerialNo, claimEndpoint, id_token) => {
   let claim
-  if (claimEndpoint !== null){
+  if (claimEndpoint) {
     claim = await RP({
       uri: claimEndpoint + `?claimSerialNo=${claimSerialNo}`,
       method: 'GET',
