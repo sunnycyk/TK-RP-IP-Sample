@@ -1,7 +1,7 @@
 module.exports = {
   "host": process.env.HOST || "http://localhost:8080",
-  "issuerServiceUrl": "https://issuer-stg.trustedkey.com",
-  "walletServiceUrl": "https://wallet-stg.trustedkey.com",
+  "issuerServiceUrl": "https://issuer.trustedkey.com",
+  "walletServiceUrl": "https://wallet.trustedkey.com",
   "callbackRoute": "/oauth/callback",
   "clientId": process.env.CLIENTID,
   "clientSecret": process.env.CLIENTSECRET,
