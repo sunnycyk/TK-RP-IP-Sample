@@ -3,7 +3,7 @@ const TKOAuth = require("../util/tkoauth")
 const TKIssuing = require("../util/tkissuing")
 const Config = require("../config")
 const Url = require("url")
-const Host = process.env.HOST || Config.host
+const Host = Config.host
 
 const invalidAuth = "Invalid authentication information"
 const invalidReq = "Invalid wallet request"

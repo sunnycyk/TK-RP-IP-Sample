@@ -3,9 +3,9 @@ const Url = require("url")
 const RP = require("request-promise-native")
 const Config = require("../config")
 const claims = Config.claims
-const Host = process.env.HOST || Config.host
-const clientId = process.env.CLIENTID || Config.clientId
-const clientSecret = process.env.CLIENTSECRET || Config.clientSecret
+const Host = Config.host
+const clientId = Config.clientId
+const clientSecret = Config.clientSecret
 
 /*
  * Generic helper method used to generate claims

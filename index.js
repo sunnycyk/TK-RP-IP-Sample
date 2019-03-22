@@ -4,7 +4,7 @@ const BodyParser = require("body-parser")
 const Router = require("./routes/main")
 const Config = require("./config")
 
-const port = process.env.PORT || Config.port
+const port = Config.port
 
 var app = Express()
 app.use(CORS())
