@@ -20,6 +20,8 @@ tkclaim.verify_id_token = function (clientId, id_token, publicKey) {
 
   // Verify id token signing key
   let claims, audWithoutGuid
+  let currentHost = 'https://localhost'
+
   try{
     switch (jwt.header.alg) {
     case 'ES256':
@@ -30,7 +32,11 @@ tkclaim.verify_id_token = function (clientId, id_token, publicKey) {
       Assert.strictEqual(claims.iss, 'https://self-issued.me')
       Assert.deepStrictEqual(claims.sub_jwk, Utils.hexToJwk(publicKey))
       audWithoutGuid = claims.aud.map(aud => aud.replace(/\?guid=.+$/, ''))
-      Assert.deepStrictEqual(audWithoutGuid, [clientId, 'https://localhost', expectedCallbackUrl])
+
+      if (Config.host.indexOf('localhost') === -1){
+        currentHost = Config.host
+      }
+      Assert.deepStrictEqual(audWithoutGuid, [clientId, currentHost, expectedCallbackUrl])
       break
     default:
       throw new Error(`Unsupported id_token alg ${jwt.header.alg}`)
