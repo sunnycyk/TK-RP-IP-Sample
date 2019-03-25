@@ -1,11 +1,11 @@
 const ClientOAuth2 = require('client-oauth2')
 const Url = require("url")
-const rp = require("request-promise-native")
-const config = require("../config")
-const claims = config.claims
-const host = process.env.HOST || config.host
-const clientId = process.env.CLIENTID || config.clientId
-const clientSecret = process.env.CLIENTSECRET || config.clientSecret
+const RP = require("request-promise-native")
+const Config = require("../config")
+const claims = Config.claims
+const Host = Config.host
+const clientId = Config.clientId
+const clientSecret = Config.clientSecret
 
 /*
  * Generic helper method used to generate claims
@@ -14,6 +14,7 @@ const clientSecret = process.env.CLIENTSECRET || config.clientSecret
  */
 let genClaims = () => {
   let userinfo = claims.reduce((dict, claim) => {
+    // eslint-disable-next-line security/detect-object-injection
     dict[claim] = null
     return dict
   }, {})
@@ -28,9 +29,9 @@ let genClaims = () => {
 var genOauthClient = (scopes, state) => new ClientOAuth2({
   clientId: clientId,
   clientSecret: clientSecret,
-  accessTokenUri: Url.resolve(config.walletServiceUrl, '/oauth/token'),
-  authorizationUri: Url.resolve(config.walletServiceUrl, '/oauth/authorize'),
-  redirectUri: Url.resolve(host, config.callbackRoute),
+  accessTokenUri: Url.resolve(Config.walletServiceUrl, '/oauth/token'),
+  authorizationUri: Url.resolve(Config.walletServiceUrl, '/oauth/authorize'),
+  redirectUri: Url.resolve(Host, Config.callbackRoute),
   scopes: scopes,
   state: state
 })
@@ -47,8 +48,8 @@ var getAuthUri = (oauthClient, query, useClaims) => {
 var getCallbackToken = async (oauthClient, originalUrl) => {
   let tok = await oauthClient.code.getToken(originalUrl)
   let accessToken = tok.accessToken
-  return await rp({
-    uri: Url.resolve(config.walletServiceUrl, '/oauth/user'),
+  return await RP({
+    uri: Url.resolve(Config.walletServiceUrl, '/oauth/user'),
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + accessToken
