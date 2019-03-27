@@ -10,7 +10,7 @@ var app = Express()
 app.use(CORS())
 app.use(BodyParser.json())
 app.use(BodyParser.urlencoded({ 
-  extended: true
+  extended: false
 }))
 app.use(Express.static("./public"))
 app.use("/", Router)

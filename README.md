@@ -38,7 +38,7 @@ Now you can make changes and push using `git push heroku master`
 
 ### Customization Guide
 
-1. *Changing scopes*: adjust routes/oauth.js line 10, 11, or 12
-2. *Changing claims requested*: adjust config.json "claims" key
-3. *Changing claims issued*: adjust routes/oauth.js line 54-59
+1. *Changing scopes*: adjust clients object in routes/oauth.js
+2. *Changing claims requested*: adjust `genRoute` in routes/oauth.js
+3. *Changing claims issued*: adjust `issue` case in switch in routes/oauth.js
 4. *Changing look and feel*: adjust public/index.html
