@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const TKOAuth = require("../util/tkoauth")
+const OpenIDClient = require("../util/tkoauth")
 const TKIssuing = require("../util/tkissuing")
 const Config = require("../config")
 const Url = require("url")
@@ -9,11 +9,12 @@ const invalidAuth = "Invalid authentication information"
 const invalidReq = "Invalid wallet request"
 
 const clients = {
-  "login": TKOAuth.genOauthClient(["openid"], "login"),
-  "register": TKOAuth.genOauthClient(["openid ", "profile", "phone"], "register"),
-  "issue": TKOAuth.genOauthClient(["openid"], "issue")
+  "login": new OpenIDClient(["openid"], "login"),
+  "register": new OpenIDClient(["openid ", "profile", "phone"], "register"),
+  "issue": new OpenIDClient(["openid"], "issue")
 }
 
+// TODO: refactor this using the OIDC lib
 function getDistributedClaimDetails(userInfo, claimName){
   let claimObj = {}
   if (userInfo && userInfo.hasOwnProperty('_claim_names') && userInfo._claim_names.hasOwnProperty(claimName)){
@@ -27,10 +28,9 @@ function getDistributedClaimDetails(userInfo, claimName){
   return claimObj
 }
 
-let genRoute = flow => (req, res) => {
-  let useClaims = flow === "issue"
+let genRoute = flow => async(req, res) => {
   // eslint-disable-next-line security/detect-object-injection
-  return res.redirect(TKOAuth.getAuthUri(clients[flow], req.query, useClaims))
+  return res.redirect(await clients[flow].getAuthUri(req.query))
 }
 
 let callback = async(req, res) => {
@@ -45,7 +45,7 @@ let callback = async(req, res) => {
   let userInfo = null
   try {
     // eslint-disable-next-line security/detect-object-injection
-    userInfo = await TKOAuth.getCallbackToken(clients[state], req.originalUrl)
+    userInfo = await clients[state].getCallbackToken(req.originalUrl, req.query, state, 'id_token')
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(e.message)
