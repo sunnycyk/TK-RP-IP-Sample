@@ -1,4 +1,5 @@
 const { Issuer } = require('openid-client')
+const UUID = require('uuid')
 const Url = require("url")
 const Config = require("../config")
 const Host = Config.host
@@ -17,10 +18,15 @@ const client = (async() => {
  * Generic class for OIDC abstractions
  */
 class OpenIDClient {
-  constructor(scopes, state) {
+  constructor(scopes, flow) {
     this._client = client
     this._scopes = scopes
-    this._state = state
+    this._flow = flow
+    this._nonces = {}
+  }
+
+  static getCallbackFlow(req) {
+    return req.query.state.split(':')[0]
   }
 
   _genClaims(claims) {
@@ -35,15 +41,26 @@ class OpenIDClient {
   }
 
   async getAuthUri(query, claims) {
+    const nonce = UUID.v4()
+    const id = UUID.v4()
+    // eslint-disable-next-line security/detect-object-injection
+    this._nonces[id] = nonce
     return (await this._client).authorizationUrl(Object.assign({
       redirect_uri: Url.resolve(Host, Config.callbackRoute),
-      scope: ' '.join(this._scopes),
-      state: this._state
+      scope: this._scopes.join(' '),
+      state: this._flow + ':' + id,
+      nonce
     }, query, claims ? {claims: this._genClaims(claims)} : {}))
   }
 
-  async getCallbackToken(url, query, state, response_type) {
-    return (await this._client).authorizationCallback(url, query, {state, response_type})
+  async getCallbackToken(req) {
+    const url = req.protocol + '://' + req.get('host') + req.originalUrl.split('?').shift()
+    const client = await this._client
+    const params = client.callbackParams(req)
+    const state = req.query.state
+    const nonce = this._nonces[state.split(':')[1]]
+    const token = await client.authorizationCallback(url, params, {state, nonce, response_type: 'code'})
+    return client.userinfo(token.access_token) 
   }
 }
 

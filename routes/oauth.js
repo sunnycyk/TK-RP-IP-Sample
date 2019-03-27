@@ -30,12 +30,13 @@ function getDistributedClaimDetails(userInfo, claimName){
 
 let genRoute = flow => async(req, res) => {
   // eslint-disable-next-line security/detect-object-injection
-  return res.redirect(await clients[flow].getAuthUri(req.query))
+  const url = await clients[flow].getAuthUri(req.query)
+  return res.redirect(url)
 }
 
 let callback = async(req, res) => {
-  let err = req.query.error
-  let state = req.query.state
+  const err = req.query.error
+  const flow = OpenIDClient.getCallbackFlow(req)
 
   if (err) {
     res.status(403).send(invalidAuth)
@@ -45,7 +46,7 @@ let callback = async(req, res) => {
   let userInfo = null
   try {
     // eslint-disable-next-line security/detect-object-injection
-    userInfo = await clients[state].getCallbackToken(req.originalUrl, req.query, state, 'id_token')
+    userInfo = await clients[flow].getCallbackToken(req)
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(e.message)
@@ -66,7 +67,7 @@ let callback = async(req, res) => {
     <br />
     <p><a href='/'>Home</a></p>
   `
-  switch (state){
+  switch (flow) {
   case 'login':
   {
     return res.send(tokenMSG)
