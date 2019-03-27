@@ -2,15 +2,13 @@ const router = require("express").Router()
 const OpenIDClient = require("../util/tkoauth")
 const TKIssuing = require("../util/tkissuing")
 const Config = require("../config")
-const Url = require("url")
-const Host = Config.host
 
 const invalidAuth = "Invalid authentication information"
 const invalidReq = "Invalid wallet request"
 
 const clients = {
   "login": new OpenIDClient(["openid"], "login"),
-  "register": new OpenIDClient(["openid ", "profile", "phone"], "register"),
+  "register": new OpenIDClient(Config.registerScopes, "register"),
   "issue": new OpenIDClient(["openid"], "issue")
 }
 
@@ -98,17 +96,7 @@ let callback = async(req, res) => {
       let publicKey = userInfo[Config.claims[0]]
       // eslint-disable-next-line no-console
       console.log("Got Public key: ", publicKey)
-      const claimValues = {
-        name: "Bob A. Smith",
-        given_name: "Bob",
-        family_name: "Smith",
-        gender: "Male",
-        birthdate: "120101000000Z",
-        phone_number: {endpoint: Url.resolve(Host, '/claimdetails'), loa: 1.0},
-        "https://auth.trustedkey.com/documentID": "X1234567"
-      }
-
-      const status = await TKIssuing.issue(publicKey, claimValues)
+      const status = await TKIssuing.issue(publicKey, Config.issuanceClaims)
       // get Claim
       if (status === true) {
         // eslint-disable-next-line no-constant-condition

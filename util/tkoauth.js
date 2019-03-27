@@ -54,7 +54,7 @@ class OpenIDClient {
   }
 
   async getCallbackToken(req) {
-    const url = req.protocol + '://' + req.get('host') + req.originalUrl.split('?').shift()
+    const url = Url.resolve(Host, Config.callbackRoute)
     const client = await this._client
     const params = client.callbackParams(req)
     const state = req.query.state
