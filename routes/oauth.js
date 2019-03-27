@@ -29,8 +29,12 @@ function getDistributedClaimDetails(userInfo, claimName){
 }
 
 let genRoute = flow => async(req, res) => {
+  let claims = null
+  if (flow === 'issue') {
+    claims = ['https://auth.trustedkey.com/publicKey']
+  }
   // eslint-disable-next-line security/detect-object-injection
-  const url = await clients[flow].getAuthUri(req.query)
+  const url = await clients[flow].getAuthUri(req.query, claims)
   return res.redirect(url)
 }
 
