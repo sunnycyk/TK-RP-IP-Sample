@@ -8,7 +8,7 @@ const ourSecret = 'asdf'
 const docsig = new DocSig(Config.walletServiceUrl, Config.clientId, Config.clientSecret, ourClientId, ourSecret)
 
 Router.get('/docsig', (req, res) => {
-  docsig.documentSignRequest(req.query.login_hint, Config.host + '/docsig/upload', Config.host + '/docsigtest.pdf')
+  docsig.documentSignRequest(req.query.login_hint, Config.host + '/docsig/upload', Config.host + '/docsigtest.pdf', ['2.5.4.3'])
     .then(json => {
       res.redirect('/docsig/status?checksum=' + encodeURIComponent(json.data.checksum))
     })
