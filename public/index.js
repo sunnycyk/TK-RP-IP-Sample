@@ -108,3 +108,10 @@ fetch('/listClaims')
       tbody.appendChild(tr)
     })
   })
+
+function init() {
+  document.getElementById('email').focus()
+}
+
+window.addEventListener('load', init)
+
