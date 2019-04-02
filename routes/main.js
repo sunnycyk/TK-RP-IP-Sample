@@ -1,7 +1,8 @@
 const router = require("express").Router()
 const subRouters = [
   "./oauth",
-  "./claims"
+  "./claims",
+  "./docsig"
 ]
 
 subRouters.forEach(subRoute => {
