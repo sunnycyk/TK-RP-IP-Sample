@@ -10,8 +10,8 @@ const OID = require('trustedkey-js/oid')
 const Utils = require('trustedkey-js/utils')
 
 const url = Config.issuerServiceUrl
-const clientId = process.env.CLIENTID || Config.clientId
-const clientSecret = process.env.CLIENTSECRET || Config.clientSecret
+const clientId = Config.clientId
+const clientSecret = Config.clientSecret
 const issuerService = new IssuerService(url, clientId, clientSecret)
 const credentialRegistryService = new CredentialRegistryService(url, clientId, clientSecret)
 
@@ -105,7 +105,7 @@ tkissuing.revoke = (claimId) => {
 
 tkissuing.fetchDistributedClaimValue = async (claimSerialNo, claimEndpoint, id_token) => {
   let claim
-  if (claimEndpoint !== null){
+  if (claimEndpoint) {
     claim = await RP({
       uri: claimEndpoint + `?claimSerialNo=${claimSerialNo}`,
       method: 'GET',

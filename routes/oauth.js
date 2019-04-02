@@ -1,19 +1,18 @@
 const router = require("express").Router()
-const TKOAuth = require("../util/tkoauth")
+const OpenIDClient = require("../util/tkoauth")
 const TKIssuing = require("../util/tkissuing")
 const Config = require("../config")
-const Url = require("url")
-const Host = process.env.HOST || Config.host
 
 const invalidAuth = "Invalid authentication information"
 const invalidReq = "Invalid wallet request"
 
 const clients = {
-  "login": TKOAuth.genOauthClient(["openid"], "login"),
-  "register": TKOAuth.genOauthClient(["openid ", "profile", "phone"], "register"),
-  "issue": TKOAuth.genOauthClient(["openid"], "issue")
+  "login": new OpenIDClient(["openid"], "login"),
+  "register": new OpenIDClient(Config.registerScopes, "register"),
+  "issue": new OpenIDClient(["openid"], "issue")
 }
 
+// TODO: refactor this using the OIDC lib
 function getDistributedClaimDetails(userInfo, claimName){
   let claimObj = {}
   if (userInfo && userInfo.hasOwnProperty('_claim_names') && userInfo._claim_names.hasOwnProperty(claimName)){
@@ -27,15 +26,19 @@ function getDistributedClaimDetails(userInfo, claimName){
   return claimObj
 }
 
-let genRoute = flow => (req, res) => {
-  let useClaims = flow === "issue"
+let genRoute = flow => async(req, res) => {
+  let claims = null
+  if (flow === 'issue') {
+    claims = ['https://auth.trustedkey.com/publicKey']
+  }
   // eslint-disable-next-line security/detect-object-injection
-  return res.redirect(TKOAuth.getAuthUri(clients[flow], req.query, useClaims))
+  const url = await clients[flow].getAuthUri(req.query, claims)
+  return res.redirect(url)
 }
 
 let callback = async(req, res) => {
-  let err = req.query.error
-  let state = req.query.state
+  const err = req.query.error
+  const flow = OpenIDClient.getCallbackFlow(req)
 
   if (err) {
     res.status(403).send(invalidAuth)
@@ -45,7 +48,7 @@ let callback = async(req, res) => {
   let userInfo = null
   try {
     // eslint-disable-next-line security/detect-object-injection
-    userInfo = await TKOAuth.getCallbackToken(clients[state], req.originalUrl)
+    userInfo = await clients[flow].getCallbackToken(req)
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(e.message)
@@ -66,7 +69,7 @@ let callback = async(req, res) => {
     <br />
     <p><a href='/'>Home</a></p>
   `
-  switch (state){
+  switch (flow) {
   case 'login':
   {
     return res.send(tokenMSG)
@@ -93,17 +96,7 @@ let callback = async(req, res) => {
       let publicKey = userInfo[Config.claims[0]]
       // eslint-disable-next-line no-console
       console.log("Got Public key: ", publicKey)
-      const claimValues = {
-        name: "Bob A. Smith",
-        given_name: "Bob",
-        family_name: "Smith",
-        gender: "Male",
-        birthdate: "120101000000Z",
-        phone_number: {endpoint: Url.resolve(Host, '/claimdetails'), loa: 2.0},
-        "https://auth.trustedkey.com/documentID": "X1234567"
-      }
-
-      const status = await TKIssuing.issue(publicKey, claimValues)
+      const status = await TKIssuing.issue(publicKey, Config.issuanceClaims)
       // get Claim
       if (status === true) {
         // eslint-disable-next-line no-constant-condition
