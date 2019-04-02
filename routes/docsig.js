@@ -2,8 +2,8 @@ const Router = require("express").Router()
 const Config = require("../config")
 const DocSig = require('trustedkey-js/services/docsig')
 
-const ourClientId = 'asdf'
-const ourSecret = 'asdf'
+const ourClientId = Config.clientId
+const ourSecret = Config.clientSecret
 
 const docsig = new DocSig(Config.walletServiceUrl, Config.clientId, Config.clientSecret, ourClientId, ourSecret)
 
