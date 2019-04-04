@@ -55,7 +55,7 @@ function fetchClaimValue(url, id_token){
   fetch(url, {
     method: 'get',
     headers: {
-      'Authorization': 'Bearer ' + id_token            
+      'Authorization': 'Bearer ' + id_token
     }
   })
     .then(resp => resp.json())

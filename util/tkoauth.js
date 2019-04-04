@@ -29,17 +29,6 @@ class OpenIDClient {
     return req.query.state.split(':')[0]
   }
 
-  _genClaims(claims) {
-    let userinfo = claims.reduce((dict, claim) => {
-      // eslint-disable-next-line security/detect-object-injection
-      dict[claim] = {essential: true}
-      return dict
-    }, {})
-    return JSON.stringify({
-      userinfo: userinfo
-    })
-  }
-
   async getAuthUri(query, claims) {
     const nonce = UUID.v4()
     const id = UUID.v4()
@@ -50,7 +39,7 @@ class OpenIDClient {
       scope: this._scopes.join(' '),
       state: this._flow + ':' + id,
       nonce
-    }, query, claims ? {claims: this._genClaims(claims)} : {}))
+    }, query, claims ? {claims: JSON.stringify(claims)} : {}))
   }
 
   async getCallbackToken(req) {
@@ -60,7 +49,7 @@ class OpenIDClient {
     const state = req.query.state
     const nonce = this._nonces[state.split(':')[1]]
     const token = await client.authorizationCallback(url, params, {state, nonce, response_type: 'code'})
-    return client.userinfo(token.access_token) 
+    return client.userinfo(token.access_token)
   }
 }
 

@@ -29,7 +29,7 @@ Router.get("/claimdetails", async (req, res) => {
     return res.status(403).send('Forbidden')
   }
 
-  // retrieve distributed claim from db  
+  // retrieve distributed claim from db
   const claimSerialNo = req.query.claimSerialNo
   const dcClaim = TKStore.getDistributedClaim(claimSerialNo) || {}
 
