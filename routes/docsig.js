@@ -10,8 +10,24 @@ const ourSecret = Config.clientSecret
 const docsig = new DocSig(Config.walletServiceUrl, Config.clientId, Config.clientSecret, ourClientId, ourSecret)
 const Host = Config.host
 
+let lastStatus = {}
+
+function resultCheck() {
+  return (req, res, next)  => {
+    if (req.query.result && req.query.result === 'error') {
+      lastStatus = {err: 'User has denied to sign the PDF.'}
+      return res.status(400).send(lastStatus)
+    }
+    next()
+  }
+}
+
 function formParser() {
   return (req, res, next)  => {
+    if (req.query.result && req.query.result === 'error') {
+      lastStatus = {err: 'User has denied to sign the PDF.'}
+      return res.status(400).send(lastStatus)
+    }
     const form = new Formidable.IncomingForm()
     form.parse(req, (err, fields, files) => {
       if (err) {
@@ -25,23 +41,21 @@ function formParser() {
   }
 }
 
-let lastStatus = {}
-
 Router.post('/docsig', formParser(), (req, res) => {
   if (!res.locals.files.file) {
     lastStatus = {err: 'File missing'}
-    return res.status(400)
+    return res.status(400).send(lastStatus)
   }
   let fileName = res.locals.files.file.name
   FS.readFile(res.locals.files.file.path, (err, dataBuff) => {
     if (err) {
       lastStatus = {err: err.message}
-      return res.status(400)
+      return res.status(400).send(lastStatus)
     }
     FS.writeFile(`public/docsig/${fileName}`, dataBuff, (err) => {
       if (err) {
         lastStatus = {err: err.message}
-        return res.status(400)
+        return res.status(400).send(lastStatus)
       }
 
       // eslint-disable-next-line no-unused-vars
@@ -49,7 +63,7 @@ Router.post('/docsig', formParser(), (req, res) => {
       let selectedClaims = Object.values(claimFields)
       if (selectedClaims.length === 0) {
         lastStatus = {err: 'No Claim selected'}
-        return res.status(400)
+        return res.status(400).send(lastStatus)
       }
       docsig.documentSignRequest(res.locals.fields.login_hint, Host + '/docsig/upload',  Host + '/docsig/' + encodeURIComponent(fileName), selectedClaims)
         .then(json => {
@@ -58,13 +72,13 @@ Router.post('/docsig', formParser(), (req, res) => {
         })
         .catch(err => {
           lastStatus = {err: err.message}
-          res.status(400)
+          res.status(400).send(lastStatus)
         })
     })
   })
 })
 
-Router.post('/docsig/upload', formParser(), (req, res) => {
+Router.post('/docsig/upload', resultCheck(), formParser(), (req, res) => {
   if (res.locals.files.file) {
     const claims = JSON.parse(Buffer.from(req.query.id_token.split('.')[1], 'base64'))
     lastStatus = {
@@ -84,7 +98,7 @@ Router.post('/docsig/upload', formParser(), (req, res) => {
     lastStatus = {
       result
     }
-    res.status(400).json(lastStatus)
+    res.json(lastStatus)
   }
 })
 
