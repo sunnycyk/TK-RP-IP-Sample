@@ -24,10 +24,6 @@ function resultCheck() {
 
 function formParser() {
   return (req, res, next)  => {
-    if (req.query.result && req.query.result === 'error') {
-      lastStatus = {err: 'User has denied to sign the PDF.'}
-      return res.status(400).send(lastStatus)
-    }
     const form = new Formidable.IncomingForm()
     form.parse(req, (err, fields, files) => {
       if (err) {
