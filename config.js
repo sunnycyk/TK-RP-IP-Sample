@@ -22,7 +22,8 @@ module.exports = {
       loa: 1.0
     },
     address: "123 ABC street, Oakland, CA12345",
-    "https://auth.trustedkey.com/documentID": "X1234567"
+    "https://auth.trustedkey.com/documentID": "X1234567",
+    "1.2.3.4.5" : "Club Code Value"
   },
   expiryYears: 10
 }
