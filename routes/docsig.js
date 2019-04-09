@@ -25,6 +25,8 @@ function formParser() {
   }
 }
 
+let lastStatus = {}
+
 Router.post('/docsig', formParser(), (req, res) => {
   if (!res.locals.files.file) {
     lastStatus = {err: 'File missing'}
