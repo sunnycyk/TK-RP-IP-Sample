@@ -21,6 +21,7 @@ module.exports = {
       endpoint: Url.resolve(host, '/claimdetails'),
       loa: 1.0
     },
+    address: "123 ABC street, Oakland, CA12345",
     "https://auth.trustedkey.com/documentID": "X1234567"
   },
   expiryYears: 10

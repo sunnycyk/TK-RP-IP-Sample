@@ -55,7 +55,7 @@ function getClaimDetails(pem){
       break
     default: {
       let claimAttr = {}
-      claimAttr.name = OidToClaim.get(oid) || oid 
+      claimAttr.name = OidToClaim.get(oid) || oid
       claimAttr.path = oid
       claimAttr.value = attr.value // TODO: Check for DateOID
       claim.attributes.push(claimAttr)
@@ -117,4 +117,3 @@ tkissuing.fetchDistributedClaimValue = async (claimSerialNo, claimEndpoint, id_t
   }
   return claim
 }
-

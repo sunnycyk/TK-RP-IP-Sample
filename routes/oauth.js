@@ -29,7 +29,7 @@ function getDistributedClaimDetails(userInfo, claimName){
 let genRoute = flow => async(req, res) => {
   let claims = null
   if (flow === 'issue') {
-    claims = {userInfo: {'https://auth.trustedkey.com/publicKey':{essential:true}}}
+    claims = {userinfo: {'https://auth.trustedkey.com/publicKey':{essential:true}}}
   }
   // eslint-disable-next-line security/detect-object-injection
   const url = await clients[flow].getAuthUri(req.query, claims)
@@ -79,21 +79,21 @@ let callback = async(req, res) => {
     // Get ByRef claim endpoint, if any
     const issuedDCClaim = getDistributedClaimDetails(userInfo, 'phone_number')
 
-    let dcClaim = await TKIssuing.fetchDistributedClaimValue(issuedDCClaim.claimSerialNo, issuedDCClaim.endpoint, issuedDCClaim.access_token) 
+    let dcClaim = await TKIssuing.fetchDistributedClaimValue(issuedDCClaim.claimSerialNo, issuedDCClaim.endpoint, issuedDCClaim.access_token)
     if (dcClaim && dcClaim.value){
 
       // Update distributed claim access_token since it is required for dynamic fetch of claim value
       TKIssuing.updateDistributedClaim(issuedDCClaim.claimSerialNo, issuedDCClaim.access_token)
 
       tokenMSG += `</br><p>Distributed Claim Value: ${dcClaim.value}</p>`
-    }  
+    }
 
     return res.send(tokenMSG)
   }
   case 'issue':
   {
     try {
-      let publicKey = userInfo[Config.claims[0]]
+      let publicKey = userInfo['https://auth.trustedkey.com/publicKey']
       // eslint-disable-next-line no-console
       console.log("Got Public key: ", publicKey)
       const status = await TKIssuing.issue(publicKey, Config.issuanceClaims)
@@ -102,7 +102,7 @@ let callback = async(req, res) => {
         // eslint-disable-next-line no-constant-condition
         while (true) {
           try {
-            const pems = await TKIssuing.getClaims(publicKey)                            
+            const pems = await TKIssuing.getClaims(publicKey)
             TKIssuing.storeClaim(publicKey, pems) // store claim
             break
           } catch (err) {
@@ -112,14 +112,14 @@ let callback = async(req, res) => {
           }
         }
       }
-        
+
       return res.send("<p>Claims were issued!</p>" + tokenMSG)
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e.message)
       const msg = "Error: Could not issue claims. If you do not have any internal syntax errors, then please ensure you have requested issuing features on devportal"
       return res.status(500).send(msg)
-    }    
+    }
   }
   }
 }

@@ -12,18 +12,37 @@
         width: 120px;
         padding: 2px 0px;
     }
+    #docsigform {
+        font-size: 12px;
+        width: 100%;
+        padding: 15px 5px;
+    }
+    #select-claims {
+        padding: 10px 5px;
+    }
     </style>
     <input type="email" placeholder="Email" id="email">
     <button type="button" onclick="doFlow('login')">Login</button>
     <button type="button" onclick="doFlow('register')">Register</button>
     <button type="button" onclick="doFlow('issue')">Issue</button>
-    <button type="button" onclick="doFlow('docsig')">DocSig</button>
+    <button type="button" id="docsigbutton" onclick="displayUploadForm()">Show DocSig Form</button>
+    <div id="docsigform" hidden>
+        <form id="docsig">
+            <input id="uploadpdf" type="file" accept="application/pdf" />
+            <div id="select-claims">
+                <h4>Select Claims to sign</h4>
+                <input type="radio" name="claim" value="1.2.840.113549.1.9.1" checked> Email <br>
+                <input type="radio" name="claim" value="2.5.4.3"> Full Name <br>
+            </div>
+            <button type="button" onclick="uploadAndSign()">Upload and Sign</button>
+        </form>
+    </div>
     <div id="claims">
         <table>
             <thead>
                 <tr>
                     <td>Serial Number</td>
-                    <td>Claim</td>                    
+                    <td>Claim</td>
                     <td>Revoke</td>
                 </tr>
             </thead>

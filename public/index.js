@@ -50,6 +50,51 @@ function _tdDistributedClaim(claimText, dcClaim){
   return dcClaimTD
 }
 
+
+// eslint-disable-next-line no-unused-vars
+function displayUploadForm() {
+  var docsigForm = document.getElementById('docsigform')
+  var claims = document.getElementById('claims')
+  var docsigBtn = document.getElementById('docsigbutton')
+  docsigForm.hidden = !docsigForm.hidden
+  if (docsigForm.hidden) {
+    docsigBtn.textContent = 'Show Docsig Form'
+  } else {
+    docsigBtn.textContent = 'Hide Docsig Form'
+  }
+  claims.hidden = !claims.hidden
+}
+
+// eslint-disable-next-line no-unused-vars
+function uploadAndSign() {
+  var email_regex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+  var email = document.getElementById('email').value
+  if (!email.match(email_regex)) {
+    alert('Missing login hint')
+  } else {
+    let docsigForm = document.getElementById('docsig')
+    let formData = new FormData(docsigForm)
+    let fileField = document.getElementById('docsig').querySelector("input[type='file']")
+    let file = fileField.files[0]
+    if (file) {
+      formData.append('file', file)
+      formData.append('login_hint', email)
+      fetch('/docsig', {
+        method: 'post',
+        body: formData
+      })
+        .then(_ => { // success upload and waiting for sign
+          window.location.href = '/docsig/status'
+        })
+        .catch(_ => {
+          window.location.href = '/docsig/status'
+        })
+    } else {
+      alert('File fields missing')
+    }
+  }
+}
+
 // eslint-disable-next-line no-unused-vars
 function fetchClaimValue(url, id_token){
   fetch(url, {
