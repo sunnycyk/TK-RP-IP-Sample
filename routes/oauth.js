@@ -35,7 +35,7 @@ let genRoute = flow => async(req, res) => {
       userinfo: {
         'email':{essential:true},
         'name':null,
-        '1.2.3.4.5':{essential:true}
+        '1.2.3.4.5':null
       }
     }
   }
