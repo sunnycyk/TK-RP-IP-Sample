@@ -23,5 +23,6 @@ module.exports = {
     },
     "https://auth.trustedkey.com/documentID": "X1234567"
   },
+  publicKey: 'https://auth.trustedkey.com/publicKey',
   expiryYears: 10
 }
