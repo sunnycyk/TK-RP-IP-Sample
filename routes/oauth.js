@@ -29,7 +29,7 @@ function getDistributedClaimDetails(userInfo, claimName){
 let genRoute = flow => async(req, res) => {
   let claims = null
   if (flow === 'issue') {
-    claims = ['https://auth.trustedkey.com/publicKey']
+    claims = [Config.publicKey]
   }
   // eslint-disable-next-line security/detect-object-injection
   const url = await clients[flow].getAuthUri(req.query, claims)
@@ -93,7 +93,7 @@ let callback = async(req, res) => {
   case 'issue':
   {
     try {
-      let publicKey = userInfo[Config.claims[0]]
+      let publicKey = userInfo[Config.publicKey]
       // eslint-disable-next-line no-console
       console.log("Got Public key: ", publicKey)
       const status = await TKIssuing.issue(publicKey, Config.issuanceClaims)
