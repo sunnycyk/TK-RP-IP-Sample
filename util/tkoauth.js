@@ -6,6 +6,9 @@ const Host = Config.host
 const clientId = Config.clientId
 const clientSecret = Config.clientSecret
 
+// Our discovery endpoint takes a while :)
+Issuer.defaultHttpOptions = { timeout: 3500 }
+
 const client = (async() => {
   const issuer = await Issuer.discover(Config.walletServiceUrl)
   return new issuer.Client({
