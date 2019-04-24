@@ -1,6 +1,7 @@
 const router = require("express").Router()
 const OpenIDClient = require("../util/tkoauth")
 const TKIssuing = require("../util/tkissuing")
+const TKStore = require("../util/tkstore")
 const Config = require("../config")
 
 const invalidAuth = "Invalid authentication information"
@@ -29,7 +30,15 @@ function getDistributedClaimDetails(userInfo, claimName){
 let genRoute = flow => async(req, res) => {
   let claims = null
   if (flow === 'issue') {
-    claims = [Config.publicKey]
+    claims = {userinfo: {'https://auth.trustedkey.com/publicKey':{essential:true}}}
+  } else if (flow === 'login') {
+    claims = {
+      userinfo: {
+        'email':{essential:true},
+        'name':null,
+        '1.2.3.4.5':null
+      }
+    }
   }
   // eslint-disable-next-line security/detect-object-injection
   const url = await clients[flow].getAuthUri(req.query, claims)
@@ -79,21 +88,21 @@ let callback = async(req, res) => {
     // Get ByRef claim endpoint, if any
     const issuedDCClaim = getDistributedClaimDetails(userInfo, 'phone_number')
 
-    let dcClaim = await TKIssuing.fetchDistributedClaimValue(issuedDCClaim.claimSerialNo, issuedDCClaim.endpoint, issuedDCClaim.access_token) 
+    let dcClaim = await TKIssuing.fetchDistributedClaimValue(issuedDCClaim.claimSerialNo, issuedDCClaim.endpoint, issuedDCClaim.access_token)
     if (dcClaim && dcClaim.value){
 
       // Update distributed claim access_token since it is required for dynamic fetch of claim value
-      TKIssuing.updateDistributedClaim(issuedDCClaim.claimSerialNo, issuedDCClaim.access_token)
+      await TKStore.updateDistributedClaim(issuedDCClaim.claimSerialNo, issuedDCClaim.access_token)
 
       tokenMSG += `</br><p>Distributed Claim Value: ${dcClaim.value}</p>`
-    }  
+    }
 
     return res.send(tokenMSG)
   }
   case 'issue':
   {
     try {
-      let publicKey = userInfo[Config.publicKey]
+      let publicKey = userInfo['https://auth.trustedkey.com/publicKey']
       // eslint-disable-next-line no-console
       console.log("Got Public key: ", publicKey)
       const status = await TKIssuing.issue(publicKey, Config.issuanceClaims)
@@ -102,8 +111,8 @@ let callback = async(req, res) => {
         // eslint-disable-next-line no-constant-condition
         while (true) {
           try {
-            const pems = await TKIssuing.getClaims(publicKey)                            
-            TKIssuing.storeClaim(publicKey, pems) // store claim
+            const pems = await TKIssuing.getClaims(publicKey)
+            await TKIssuing.storeClaim(publicKey, pems) // store claim
             break
           } catch (err) {
             if (err.message !== 'The operation is pending.') {
@@ -112,14 +121,14 @@ let callback = async(req, res) => {
           }
         }
       }
-        
+
       return res.send("<p>Claims were issued!</p>" + tokenMSG)
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e.message)
       const msg = "Error: Could not issue claims. If you do not have any internal syntax errors, then please ensure you have requested issuing features on devportal"
       return res.status(500).send(msg)
-    }    
+    }
   }
   }
 }

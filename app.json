@@ -25,5 +25,9 @@
       "description": "The wallet service url to be used by OAuth and Trusted Key SDK",
       "value": "https://wallet.trustedkey.com"
     }
-  }
+  },
+  "addons": [
+    "heroku-redis",
+    "cloudinary"
+  ]
 }

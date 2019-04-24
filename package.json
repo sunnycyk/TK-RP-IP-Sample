@@ -14,8 +14,11 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "cloudinary": "^1.14.0",
     "cors": "^2.8.4",
     "express": "^4.16.2",
+    "formidable": "^1.2.1",
+    "ioredis": "^4.9.0",
     "jsonwebtoken": "^8.5.0",
     "openid-client": "^2.4.5",
     "request": "^2.83.0",

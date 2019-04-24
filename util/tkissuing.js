@@ -55,7 +55,7 @@ function getClaimDetails(pem){
       break
     default: {
       let claimAttr = {}
-      claimAttr.name = OidToClaim.get(oid) || oid 
+      claimAttr.name = OidToClaim.get(oid) || oid
       claimAttr.path = oid
       claimAttr.value = attr.value // TODO: Check for DateOID
       claim.attributes.push(claimAttr)
@@ -78,30 +78,23 @@ tkissuing.issue = (publicKey, attrs) => {
   })
 }
 
-tkissuing.getClaims = (publicKey) => {
-  const requestid = TKStore.getRequestIdByPubkey(publicKey)
+tkissuing.getClaims = async publicKey => {
+  const requestid = await TKStore.getRequestIdByPubkey(publicKey)
   return issuerService.getClaims(requestid, publicKey)
 }
 
-tkissuing.storeClaim = (publicKey, pems) => {
+tkissuing.storeClaim = async(publicKey, pems) => {
   // last pems is issuer
-  pems.slice(0, -1).map(pem => {
+  for (const pem of pems.slice(0, -1)) {
     const claim = getClaimDetails(pem)
-    TKStore.storeClaim(claim)
-
-    if (claim.endpoint){
-      TKStore.storeDistributedClaim(publicKey, claim.serialNo, claim.endpoint)
+    await TKStore.storeClaim(claim)
+    if (claim.endpoint) {
+      await TKStore.storeDistributedClaim(publicKey, claim.serialNo, claim.endpoint)
     }
-  })
+  }
 }
 
-tkissuing.updateDistributedClaim = (serialNo, access_token) => {
-  TKStore.updateDistributedClaim(serialNo, access_token)
-}
-
-tkissuing.revoke = (claimId) => {
-  return credentialRegistryService.revokeClaim(claimId)
-}
+tkissuing.revoke = (claimId) => credentialRegistryService.revokeClaim(claimId)
 
 tkissuing.fetchDistributedClaimValue = async (claimSerialNo, claimEndpoint, id_token) => {
   let claim
@@ -117,4 +110,3 @@ tkissuing.fetchDistributedClaimValue = async (claimSerialNo, claimEndpoint, id_t
   }
   return claim
 }
-

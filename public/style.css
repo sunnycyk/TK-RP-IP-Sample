@@ -1,0 +1,20 @@
+table {
+    border: 1px solid #aaaaaa;
+    margin-top: 2px;
+}
+table td {
+    border-left: 1px solid #aaaaaa;
+    border-top: 1px solid #aaaaaa;
+    font-size: 12px;
+    text-align: center;
+    width: 120px;
+    padding: 2px 0px;
+}
+#docsigform {
+    font-size: 12px;
+    width: 100%;
+    padding: 15px 5px;
+}
+#select-claims {
+    padding: 10px 5px;
+}

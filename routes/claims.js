@@ -4,7 +4,6 @@ const TKIssuing = require("../util/tkissuing")
 const TKClaim = require('../util/tkclaim')
 const Config = require("../config")
 
-
 Router.get("/revoke/:address?", async (req, res) => {
   const response = await TKIssuing.revoke(req.query.address)
   const msg = `<pre>${JSON.stringify(response, null, 2)}</pre>`
@@ -29,16 +28,21 @@ Router.get("/claimdetails", async (req, res) => {
     return res.status(403).send('Forbidden')
   }
 
-  // retrieve distributed claim from db  
-  const claimSerialNo = req.query.claimSerialNo
-  const dcClaim = TKStore.getDistributedClaim(claimSerialNo) || {}
-
-  if (dcClaim.endpoint) {
+  try {
+    // retrieve distributed claim from db
+    const claimSerialNo = req.query.claimSerialNo
+    const dcClaim = await TKStore.getDistributedClaim(claimSerialNo) || {}
+    if (dcClaim.endpoint) {
     // validate id_token
-    TKClaim.verify_id_token(Config.clientId, token[1], dcClaim.publicKey)
-    return res.json(dcClaim)
+      TKClaim.verify_id_token(Config.clientId, token[1], dcClaim.publicKey)
+      return res.json(dcClaim)
+    }
+    return res.json({})
+  } catch(e) {
+    // eslint-disable-next-line no-console
+    console.error('Claim Details Error: ', e)
+    res.status(500).json({err: e.message})
   }
-  return res.json({})
 })
 
 module.exports = Router
