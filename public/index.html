@@ -1,25 +1,95 @@
 <html>
     <head>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+            
+
         <link rel="stylesheet" href="/style.css">
     </head>
     <body>
-        <input type="email" placeholder="Email" id="email">
-        <button type="button" onclick="doFlow('login')">Login</button>
-        <button type="button" onclick="doFlow('register')">Register</button>
-        <button type="button" onclick="doFlow('issue')">Issue</button>
-        <button type="button" id="docsigbutton" onclick="displayUploadForm()">Show DocSig Form</button>
-        <div id="docsigform" hidden>
-            <form id="docsig">
-                <input id="uploadpdf" type="file" accept="application/pdf" />
-                <div id="select-claims">
-                    <h4>Select Claims to sign</h4>
-                    <input type="radio" name="claim" value="1.2.840.113549.1.9.1" checked> Email <br>
-                    <input type="radio" name="claim" value="2.5.4.3"> Full Name <br>
+
+        <div class="container">
+
+            <div class="row">
+
+                <span class="Title">H-ISAC  DocSig</span> 
+                
+              
+
+            </div>
+       
+            <div class="row">
+
+                    <span class="SubTitle">Powered by</span> <img class="TKImage" src="/img/TKBanner.png">
+    
                 </div>
-                <button type="button" onclick="uploadAndSign()">Upload and Sign</button>
-            </form>
-        </div>
-        <div id="claims">
+
+                <div class="row">
+                    <hr class="BlueBar"></hr>
+                </div>
+
+                <div class="row">
+                    <div class="col col-sm-6">
+
+                           
+                            
+                            <!-- <button type="button" onclick="doFlow('login')">Login</button>
+                            <button type="button" onclick="doFlow('register')">Register</button>
+                            <button type="button" onclick="doFlow('issue')">Issue</button>
+                            <button type="button" id="docsigbutton" onclick="displayUploadForm()">Show DocSig Form</button> -->
+                            <div id="docsigform">
+                                <form id="docsig">
+                                        <select class="browser-default custom-select">
+                                                <option selected><span class="Text">Choose Wallet</span></option>
+                                                <option value="1">AxleWallet</option>
+                                                <option value="2">PortableID</option>
+                                              </select>
+                                              <br><br>
+                                    <input class="form-control" type="email" placeholder="Email" id="email"> <br>
+                                    <input class="" id="uploadpdf" type="file" accept="application/pdf" />
+                                    <div id="select-claims">
+                                        <span class="Text">Select Claims to sign</span><br>
+                                        <input type="radio" name="claim" value="1.2.840.113549.1.9.1" checked> <span class="Text"> Email </span><br>
+                                        <input type="radio" name="claim" value="2.5.4.3"> <span class="Text"> Full Name </span><br>
+                                    </div>
+                                    <button class="Purple" type="button" onclick="uploadAndSign()"><span class="ButtonText">Send</span></button>
+                                </form>
+                            </div>
+
+                    </div>
+
+
+                    <div class="col col-sm-6">
+
+                            <span class="Text">  Get the document signed in 4 simple steps:
+                              </span>
+    
+                              <br>
+                              <img src="/img/1.png"> <span class="SubText">Choose the wallet </span> 
+    
+    
+                              <br><br>
+                              <img src="/img/2.png"> <span class="SubText"> Enter Sender’s Identifier i.e. email/phone # </span> 
+                              <br><br>
+                              <img src="/img/3.png"> <span class="SubText"> Choose the file to get signed </span> 
+
+                              <br><br>
+                              <img src="/img/4.png"> <span class="SubText"> Choose the claims i.e. Email or Full name
+                                </span> 
+                        </div>
+
+                    </div>
+                </div>
+
+     
+
+
+
+    </div>
+
+        <!-- <div id="claims">
             <table>
                 <thead>
                     <tr>
@@ -31,7 +101,7 @@
                 <tbody>
                 </tbody>
             </table>
-        </div>
+        </div> -->
         <script src="/index.js"></script>
     </body>
 </html>
