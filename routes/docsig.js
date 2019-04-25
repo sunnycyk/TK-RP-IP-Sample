@@ -92,6 +92,7 @@ Router.get('/docsig/status', async(_, res) => {
     if (status.file) {
       // eslint-disable-next-line security/detect-non-literal-fs-filename
       const dataBuff = FS.readFileSync(status.file)
+      setStatus(defaultStatus)
       res.set('Content-Type', 'application/pdf').send(dataBuff)
     } else {
       res.set('Refresh', '5;url=/docsig/status').json(status)
