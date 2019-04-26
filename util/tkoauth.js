@@ -1,10 +1,15 @@
 const { Issuer } = require('openid-client')
 const UUID = require('uuid')
 const Url = require("url")
+const Cache = require('./cache')
 const Config = require("../config")
 const Host = Config.host
 const clientId = Config.clientId
 const clientSecret = Config.clientSecret
+
+const nonceKeyPrefix = 'nonce-'
+const saveNonce = (key, nonce) => Cache.set(nonceKeyPrefix + key, nonce)
+const getNonce = key => Cache.get(nonceKeyPrefix + key)
 
 // Our discovery endpoint takes a while :)
 Issuer.defaultHttpOptions = { timeout: 3500 }
@@ -25,7 +30,6 @@ class OpenIDClient {
     this._client = client
     this._scopes = scopes
     this._flow = flow
-    this._nonces = {}
   }
 
   static getCallbackFlow(req) {
@@ -35,8 +39,7 @@ class OpenIDClient {
   async getAuthUri(query, claims) {
     const nonce = UUID.v4()
     const id = UUID.v4()
-    // eslint-disable-next-line security/detect-object-injection
-    this._nonces[id] = nonce
+    saveNonce(id, nonce)
     return (await this._client).authorizationUrl(Object.assign({
       redirect_uri: Url.resolve(Host, Config.callbackRoute),
       scope: this._scopes.join(' '),
@@ -50,7 +53,7 @@ class OpenIDClient {
     const client = await this._client
     const params = client.callbackParams(req)
     const state = req.query.state
-    const nonce = this._nonces[state.split(':')[1]]
+    const nonce = await getNonce(state.split(':')[1])
     const token = await client.authorizationCallback(url, params, {state, nonce, response_type: 'code'})
     return client.userinfo(token.access_token)
   }

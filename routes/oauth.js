@@ -60,7 +60,7 @@ let callback = async(req, res) => {
     userInfo = await clients[flow].getCallbackToken(req)
   } catch (e) {
     // eslint-disable-next-line no-console
-    console.error(e.message)
+    console.error(e)
     res.status(403).send(invalidReq)
     return
   }
@@ -125,7 +125,7 @@ let callback = async(req, res) => {
       return res.send("<p>Claims were issued!</p>" + tokenMSG)
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.error(e.message)
+      console.error(e)
       const msg = "Error: Could not issue claims. If you do not have any internal syntax errors, then please ensure you have requested issuing features on devportal"
       return res.status(500).send(msg)
     }
