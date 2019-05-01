@@ -34,7 +34,7 @@ Router.get("/claimdetails", async (req, res) => {
     const dcClaim = await TKStore.getDistributedClaim(claimSerialNo) || {}
     if (dcClaim.endpoint) {
     // validate id_token
-      TKClaim.verify_id_token(Config.clientId, token[1], dcClaim.publicKey)
+      TKClaim.verify_id_token(token[1], dcClaim)
       return res.json(dcClaim)
     }
     return res.json({})
