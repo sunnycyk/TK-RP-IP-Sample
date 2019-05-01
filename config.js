@@ -10,7 +10,7 @@ module.exports = {
   clientId: process.env.CLIENTID,
   clientSecret: process.env.CLIENTSECRET,
   port: process.env.PORT || 8080,
-  registerScopes: ["openid", "profile", "phone"],
+  registerScopes: ["openid", "profile", "phone", "https://auth.trustedkey.com/x5c"],
   issuanceClaims: {
     name: "Bob A. Smith",
     given_name: "Bob",

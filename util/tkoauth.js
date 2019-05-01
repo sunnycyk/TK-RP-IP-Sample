@@ -40,7 +40,9 @@ class OpenIDClient {
     const nonce = UUID.v4()
     const id = UUID.v4()
     saveNonce(id, nonce)
-    return (await this._client).authorizationUrl(Object.assign({
+    const client = (await this._client)
+    client.CLOCK_TOLERANCE = 5 // to allow a 5 second skew
+    return client.authorizationUrl(Object.assign({
       redirect_uri: Url.resolve(Host, Config.callbackRoute),
       scope: this._scopes.join(' '),
       state: this._flow + ':' + id,
@@ -51,6 +53,7 @@ class OpenIDClient {
   async getCallbackToken(req) {
     const url = Url.resolve(Host, Config.callbackRoute)
     const client = await this._client
+    client.CLOCK_TOLERANCE = 5 // to allow a 5 second skew
     const params = client.callbackParams(req)
     const state = req.query.state
     const nonce = await getNonce(state.split(':')[1])
