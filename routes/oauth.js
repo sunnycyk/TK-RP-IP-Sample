@@ -31,15 +31,8 @@ let genRoute = flow => async(req, res) => {
   let claims = null
   if (flow === 'issue') {
     claims = {userinfo: {'https://auth.trustedkey.com/publicKey':{essential:true}}}
-  } else if (flow === 'login') {
-    claims = {
-      userinfo: {
-        'email':{essential:true},
-        'name':null,
-        '1.2.3.4.5':null
-      }
-    }
   }
+  
   // eslint-disable-next-line security/detect-object-injection
   const url = await clients[flow].getAuthUri(req.query, claims)
   return res.redirect(url)
