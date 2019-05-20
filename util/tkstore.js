@@ -30,6 +30,7 @@ storage.createRequestId = pubkey => {
 storage.getRequestIdByPubkey = pubkey => Cache.get(requestsPrefix + pubkey)
 
 storage.storeClaim = async (publicKey, claim) => {
+  publicKey = publicKey || ''
   const claims = await getClaims()
   claims.push({publicKey, ...claim})
   setClaims(claims)
