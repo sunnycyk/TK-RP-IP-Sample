@@ -67,6 +67,7 @@ function displayUploadForm() {
 
 // eslint-disable-next-line no-unused-vars
 function uploadAndSign() {
+  // eslint-disable-next-line security/detect-unsafe-regex
   var email_regex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
   var email = document.getElementById('email').value
   if (!email.match(email_regex)) {
@@ -136,7 +137,7 @@ fetch('/listClaims')
       let claimText = `<pre>Name: ${claim.attributes[0].name}</pre><pre>Value: ${claim.attributes[0].value}</pre>
       <pre>Issued Date: ${claim.issuedDate || ''}</pre>
       <pre><label>Document is issued to Public Key: </label></pre>
-      <pre><label>${claim.publicKey || ''}</label></pre>`
+      <pre><label>${claim.pubkeyAddress || ''}</label></pre>`
 
       if (claim.levelOfAssurance){
         claimText += `<pre>Assurance Level: ${claim.levelOfAssurance}</pre>`

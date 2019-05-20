@@ -2,7 +2,6 @@ const Router = require("express").Router()
 const TKStore = require("../util/tkstore")
 const TKIssuing = require("../util/tkissuing")
 const TKClaim = require('../util/tkclaim')
-const Config = require("../config")
 
 Router.get("/revoke/:address?", async (req, res) => {
   const response = await TKIssuing.revoke(req.query.address)

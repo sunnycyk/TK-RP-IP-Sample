@@ -2,6 +2,7 @@ const ValidateService = require('trustedkey-js/services/validateservice')
 const Uuid = require('uuid')
 const Config = require('../config')
 const Cache = require('./cache')
+const Utils = require('trustedkey-js/utils')
 
 const requestsPrefix = 'requests-'
 const claimsKey = 'claims'
@@ -31,7 +32,8 @@ storage.getRequestIdByPubkey = pubkey => Cache.get(requestsPrefix + pubkey)
 
 storage.storeClaim = async (publicKey, claim) => {
   const claims = await getClaims()
-  claims.push({publicKey, ...claim})
+  const pubkeyAddress = Utils.userPubKeyHexToAddress(publicKey)
+  claims.push({publicKey, pubkeyAddress, ...claim})
   setClaims(claims)
 }
 
