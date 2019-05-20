@@ -31,8 +31,8 @@ function getClaimDetails(pem){
   claim.serialNo = claimCert.serialNo
   //claim.issuerName
   //claim.IssuerID
-  claim.issuedDate = claimCert.notBefore || ''
-  claim.expireDate = claimCert.notAfter || ''
+  claim.issuedDate = claimCert.notBefore
+  claim.expireDate = claimCert.notAfter
   claim.attributes = []
 
   for(const attr of claimCert.attributes){

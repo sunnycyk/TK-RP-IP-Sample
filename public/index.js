@@ -134,9 +134,9 @@ fetch('/listClaims')
       tr.appendChild(_td(claim.serialNo))
 
       let claimText = `<pre>Name: ${claim.attributes[0].name}</pre><pre>Value: ${claim.attributes[0].value}</pre>
-      <pre>Issued Date: ${claim.issuedDate}</pre>
+      <pre>Issued Date: ${claim.issuedDate || ''}</pre>
       <pre><label>Document is issued to Public Key: </label></pre>
-      <pre><label>${claim.publicKey}></label></pre>`
+      <pre><label>${claim.publicKey || ''}</label></pre>`
 
       if (claim.levelOfAssurance){
         claimText += `<pre>Assurance Level: ${claim.levelOfAssurance}</pre>`
