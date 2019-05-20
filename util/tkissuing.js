@@ -27,12 +27,12 @@ const OidToClaim = new Map(
 
 function getClaimDetails(pem){
   const claimCert = Utils.parsePem(pem)
-
   let claim = {}
   claim.serialNo = claimCert.serialNo
   //claim.issuerName
   //claim.IssuerID
-
+  claim.issuedDate = claimCert.notBefore
+  claim.expireDate = claimCert.notAfter
   claim.attributes = []
 
   for(const attr of claimCert.attributes){
@@ -87,7 +87,7 @@ tkissuing.storeClaim = async(publicKey, pems) => {
   // last pems is issuer
   for (const pem of pems.slice(0, -1)) {
     const claim = getClaimDetails(pem)
-    await TKStore.storeClaim(claim)
+    await TKStore.storeClaim(publicKey, claim)
     if (claim.endpoint) {
       await TKStore.storeDistributedClaim(publicKey, claim.serialNo, claim.endpoint)
     }

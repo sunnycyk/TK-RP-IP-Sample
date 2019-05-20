@@ -29,9 +29,9 @@ storage.createRequestId = pubkey => {
 
 storage.getRequestIdByPubkey = pubkey => Cache.get(requestsPrefix + pubkey)
 
-storage.storeClaim = async claim => {
+storage.storeClaim = async (publicKey, claim) => {
   const claims = await getClaims()
-  claims.push(claim)
+  claims.push({publicKey, ...claim})
   setClaims(claims)
 }
 

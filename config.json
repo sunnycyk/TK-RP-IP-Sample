@@ -1,0 +1,11 @@
+{
+  "host": "http://localhost:8080",
+  "issuerServiceUrl": "https://issuer.trustedkey.com",
+  "walletServiceUrl": "https://wallet.trustedkey.com",
+  "callbackRoute": "/oauth/callback",
+  "clientId": "GET CLIENT ID FROM DEVPORTAL",
+  "clientSecret": "GET CLIENT SECRET FROM DEVPORTAL",
+  "claims": ["https://auth.trustedkey.com/publicKey"],
+  "port": 8080,
+  "expiryYears": 10
+}

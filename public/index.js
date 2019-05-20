@@ -133,7 +133,9 @@ fetch('/listClaims')
       var tr = _tr()
       tr.appendChild(_td(claim.serialNo))
 
-      let claimText = `<pre>Name: ${claim.attributes[0].name}</pre><pre>Value: ${claim.attributes[0].value}</pre>`
+      let claimText = `<pre>Name: ${claim.attributes[0].name}</pre><pre>Value: ${claim.attributes[0].value}</pre><pre>Issued Date: ${claim.issuedDate}</pre><pre>
+      <label>Document is issued to Public Key: </label></pre>
+      <pre><input typ=e"text" readonly value="${claim.publicKey}" /></pre>`
 
       if (claim.levelOfAssurance){
         claimText += `<pre>Assurance Level: ${claim.levelOfAssurance}</pre>`
@@ -159,4 +161,3 @@ function init() {
 }
 
 window.addEventListener('load', init)
-
