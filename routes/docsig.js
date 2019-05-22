@@ -96,12 +96,12 @@ Router.get('/docsig/status', async(_, res) => {
       setStatus(defaultStatus)
       res.set('Content-Type', 'application/pdf').send(dataBuff)
     } else {
-      res.sendFile(Path.join(__dirname + '/../docsigStatus.html'))
+      res.sendFile(Path.join(__dirname, '/../docsigStatus.html'))
     }
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error('DocSig Status Error: ', e)
-    res.sendFile(Path.join(__dirname + '/../docsigError.html'))
+    res.sendFile(Path.join(__dirname, '../docsigError.html'))
   }
 })
 
