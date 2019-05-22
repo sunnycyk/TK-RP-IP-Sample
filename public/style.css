@@ -84,3 +84,8 @@ table td {
     color: #233CAB;
     line-height: 40px;
   }
+
+  .docsigError {
+    border-color: #aa0000;
+    color: #aa0000;
+  }
