@@ -71,3 +71,16 @@ table td {
       color: white;
       font-size: 22px;
   }
+
+  .docsigStatus {
+    border-radius: 15px;
+    font-family: PT Sans;
+    border: 1px solid  #233CAB;
+    display: block;
+    margin: 25px auto;
+    text-align: center;
+    padding: 40px 60px;
+    font-size: 22px;
+    color: #233CAB;
+    line-height: 40px;
+  }

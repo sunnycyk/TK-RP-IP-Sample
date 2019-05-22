@@ -4,6 +4,7 @@ const DocSig = require('../util/tkdocsig')
 const Cache = require('../util/cache')
 const UUID = require('uuid')
 const Config = require('../config')
+const Path = require('path')
 const FS = require('fs')
 
 const Host = Config.host
@@ -95,7 +96,8 @@ Router.get('/docsig/status', async(_, res) => {
       setStatus(defaultStatus)
       res.set('Content-Type', 'application/pdf').send(dataBuff)
     } else {
-      res.set('Refresh', '5;url=/docsig/status').json(status)
+      //res.set('Refresh', '5;url=/docsig/status').json(status)
+      res.sendFile(Path.join(__dirname + '/../docsigStatus.html'))
     }
   } catch (e) {
     // eslint-disable-next-line no-console
