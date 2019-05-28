@@ -14,8 +14,14 @@ const getNonce = key => Cache.get(nonceKeyPrefix + key)
 // Our discovery endpoint takes a while :)
 Issuer.defaultHttpOptions = { timeout: 3500 }
 
-const client = (async() => {
+const getIssuer = async() => {
   const issuer = await Issuer.discover(Config.walletServiceUrl)
+  await issuer.keystore(true)
+  return issuer
+}
+
+const client = (async() => {
+  const issuer = await getIssuer()
   return new issuer.Client({
     client_id: clientId,
     client_secret: clientSecret
@@ -37,6 +43,7 @@ class OpenIDClient {
   }
 
   async getAuthUri(query, claims) {
+    await getIssuer()
     const nonce = UUID.v4()
     const id = UUID.v4()
     saveNonce(id, nonce)
