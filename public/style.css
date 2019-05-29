@@ -89,3 +89,8 @@ table td {
     border-color: #aa0000;
     color: #aa0000;
   }
+
+  #checksum {
+    padding-top: 15px;
+    font-size: 28px;
+  }

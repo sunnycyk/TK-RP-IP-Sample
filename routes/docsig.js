@@ -15,6 +15,9 @@ const statusKey = UUID.v4()
 const setStatus = status => Cache.set(statusKey, JSON.stringify(status))
 const getStatus = async() => JSON.parse(await Cache.get(statusKey) || JSON.stringify(defaultStatus))
 
+const setChecksum = checksum => Cache.set(statusKey + 'checksum', checksum)
+const getChecksum = async() => await Cache.get(statusKey + 'checksum')
+
 const resultCheck = (req, res, next)  => {
   if (req.query.result && req.query.result === 'error') {
     const status = {err: 'User has denied to sign the PDF.'}
@@ -53,8 +56,9 @@ Router.post('/docsig', formParser, async(_, res) => {
     return res.status(400).json(status)
   }
   try {
-    await DocSig(login_hint, selectedClaims, Host + callbackRoute, localPath)
-    res.json({})
+    const result = await DocSig(login_hint, selectedClaims, Host + callbackRoute, localPath)
+    setChecksum(result.data.checksum)
+    res.json(result.data.checksum)
   } catch (e) {
     const status = {err: e.message}
     // eslint-disable-next-line no-console
@@ -96,12 +100,19 @@ Router.get('/docsig/status', async(_, res) => {
       setStatus(defaultStatus)
       res.set('Content-Type', 'application/pdf').send(dataBuff)
     } else {
-      res.sendFile(Path.join(__dirname, '/../docsigStatus.html'))
+      const checksum = await getChecksum()
+      if (checksum) {
+        const data = FS.readFileSync(Path.join(__dirname, '/../docsigStatus.html')).toString()
+        res.send(data.replace('<div id="checksum"></div>', `<div id="checksum">${checksum}</div>`))
+      }
+      else {
+        res.sendFile(Path.join(__dirname, '/../docsigStatus.html'))
+      }
     }
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error('DocSig Status Error: ', e)
-    res.sendFile(Path.join(__dirname, '../docsigError.html'))
+    res.sendFile(Path.join(__dirname, '/../docsigError.html'))
   }
 })
 
