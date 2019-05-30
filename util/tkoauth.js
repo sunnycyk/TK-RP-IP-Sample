@@ -57,7 +57,7 @@ class OpenIDClient {
     const params = client.callbackParams(req)
     const state = req.query.state
     const nonce = await getNonce(state.split(':')[1])
-    const token = await client.authorizationCallback(url, params, {state, nonce, response_type: 'code'})
+    const token = await client.callback(url, params, {state, nonce, response_type: 'code'})
     return client.userinfo(token.access_token)
   }
 }
