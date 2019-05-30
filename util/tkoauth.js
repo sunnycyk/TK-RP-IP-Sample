@@ -14,26 +14,22 @@ const getNonce = key => Cache.get(nonceKeyPrefix + key)
 // Our discovery endpoint takes a while :)
 Issuer.defaultHttpOptions = { timeout: 3500 }
 
-const getIssuer = async() => {
+const getClient = async() => {
   const issuer = await Issuer.discover(Config.walletServiceUrl)
   await issuer.keystore(true)
-  return issuer
-}
-
-const client = (async() => {
-  const issuer = await getIssuer()
-  return new issuer.Client({
+  const client =  new issuer.Client({
     client_id: clientId,
     client_secret: clientSecret
   })
-})()
+  client.CLOCK_TOLERANCE = 5 // to allow a 5 second skew
+  return client
+}
 
 /*
  * Generic class for OIDC abstractions
  */
 class OpenIDClient {
   constructor(scopes, flow) {
-    this._client = client
     this._scopes = scopes
     this._flow = flow
   }
@@ -43,12 +39,10 @@ class OpenIDClient {
   }
 
   async getAuthUri(query, claims) {
-    await getIssuer()
     const nonce = UUID.v4()
     const id = UUID.v4()
     saveNonce(id, nonce)
-    const client = (await this._client)
-    client.CLOCK_TOLERANCE = 5 // to allow a 5 second skew
+    const client = await getClient()
     return client.authorizationUrl(Object.assign({
       redirect_uri: Url.resolve(Host, Config.callbackRoute),
       scope: this._scopes.join(' '),
@@ -59,8 +53,7 @@ class OpenIDClient {
 
   async getCallbackToken(req) {
     const url = Url.resolve(Host, Config.callbackRoute)
-    const client = await this._client
-    client.CLOCK_TOLERANCE = 5 // to allow a 5 second skew
+    const client = await getClient()
     const params = client.callbackParams(req)
     const state = req.query.state
     const nonce = await getNonce(state.split(':')[1])
