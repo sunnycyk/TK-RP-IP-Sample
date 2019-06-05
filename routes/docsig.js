@@ -52,7 +52,8 @@ Router.post('/docsig', formParser, async(_, res) => {
     return res.status(400).json(status)
   }
   try {
-    await DocSig(login_hint, selectedClaims, Host + callbackRoute, localPath)
+    const result = await DocSig(login_hint, selectedClaims, Host + callbackRoute, localPath)
+    setStatus({docsig: `Signed PDF will be available soon. Please verify this 6 digit code: ${result.data.checksum}`})
     res.json({})
   } catch (e) {
     const status = {err: e.message}

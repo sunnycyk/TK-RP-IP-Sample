@@ -7,6 +7,6 @@ const docsig = new DocSig(Config.walletServiceUrl, Config.clientId, Config.clien
 module.exports = async (login_hint, selectedClaims, callbackUrl, localPath) => {
   const name = await Storage.upload(localPath)
   const url = Storage.getUrl(name)
-  await docsig.documentSignRequest(login_hint, callbackUrl, url, selectedClaims)
-  return url
+  const resp = await docsig.documentSignRequest(login_hint, callbackUrl, url, selectedClaims)
+  return resp
 }
