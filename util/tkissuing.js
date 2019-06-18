@@ -50,6 +50,8 @@ function getClaimDetails(pem){
     case OID.levelOfAssurance:
       claim.levelOfAssurance = attr.value
       break
+    case OID.docRef:
+      claim.docRef = attr.value
     case OID.endpoint:
       claim.endpoint = attr.value
       break

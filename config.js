@@ -23,7 +23,8 @@ module.exports = {
     },
     address: "123 ABC street, Oakland, CA12345",
     "https://auth.trustedkey.com/documentID": "X1234567",
-    "1.2.3.4.5" : "Club Code Value"
+    "1.2.3.4.5" : "Club Code Value",
+    "https://auth.trustedkey.com/docRef": "docRef123"
   },
   expiryYears: 10,
   redisUrl: process.env.REDIS_URL

@@ -20,10 +20,10 @@
     "formidable": "^1.2.1",
     "ioredis": "^4.9.0",
     "jsonwebtoken": "^8.5.0",
-    "openid-client": "^3.1.1",
+    "openid-client": "^2.4.5",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
-    "trustedkey-js": "^0.6.7",
+    "trustedkey-js": "^0.7.4",
     "url": "^0.11.0",
     "uuid": "^3.1.0"
   },
