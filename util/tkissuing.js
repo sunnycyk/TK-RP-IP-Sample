@@ -52,6 +52,7 @@ function getClaimDetails(pem){
       break
     case OID.docRef:
       claim.docRef = attr.value
+      break
     case OID.endpoint:
       claim.endpoint = attr.value
       break

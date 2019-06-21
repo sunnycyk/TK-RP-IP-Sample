@@ -54,7 +54,9 @@ storage.storeDistributedClaim = async (publicKey, claimSerialNo, endpoint) => {
   const dcClaims = await getDcClaims()
 
   // Issue fake value    
-  const value = Math.floor(Math.random() * 1000000000)
+  //const value = Math.floor(Math.random() * 1000000000)
+  const addressList = ['123 ABC street, Oakland, CA 94660', '940 Lincoln street, Edison, NY 10001', '100 First street, Austin, TX 73301', '100 Zack street, Tampa, FL 32003', '175 George Street, Seattle, WA 98002']
+  const value = addressList[Math.floor(Math.random() * addressList.length)]
 
   // eslint-disable-next-line security/detect-object-injection
   if (!dcClaims[claimSerialNo]) {

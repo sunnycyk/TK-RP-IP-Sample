@@ -10,18 +10,24 @@ module.exports = {
   clientId: process.env.CLIENTID,
   clientSecret: process.env.CLIENTSECRET,
   port: process.env.PORT || 8080,
-  registerScopes: ["openid", "profile", "phone", "https://auth.trustedkey.com/x5c"],
+  registerScopes: ["openid", "profile", "address", "https://auth.trustedkey.com/x5c"],
   issuanceClaims: {
     name: "Bob A. Smith",
     given_name: "Bob",
     family_name: "Smith",
     gender: "Male",
     birthdate: "120101000000Z",
-    phone_number: {
-      endpoint: Url.resolve(host, '/claimdetails'),
-      loa: 1.0
+    // phone_number: {
+    //   endpoint: Url.resolve(host, '/claimdetails'),
+    //   loa: 1.0
+    // },
+    //address: "123 ABC street, Oakland, CA12345",
+    address:{
+      formatted: {
+        endpoint: Url.resolve(host, '/claimdetails'),
+        loa: 1.0
+      }
     },
-    address: "123 ABC street, Oakland, CA12345",
     "https://auth.trustedkey.com/documentID": "X1234567",
     "1.2.3.4.5" : "Club Code Value",
     "https://auth.trustedkey.com/docRef": "docRef123"

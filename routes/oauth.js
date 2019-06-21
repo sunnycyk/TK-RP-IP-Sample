@@ -79,7 +79,7 @@ let callback = async(req, res) => {
   case 'register':
   {
     // Get ByRef claim endpoint, if any
-    const issuedDCClaim = getDistributedClaimDetails(userInfo, 'phone_number')
+    const issuedDCClaim = getDistributedClaimDetails(userInfo, 'address')
 
     let dcClaim = await TKIssuing.fetchDistributedClaimValue(issuedDCClaim.claimSerialNo, issuedDCClaim.endpoint, issuedDCClaim.access_token)
     if (dcClaim && dcClaim.value){
