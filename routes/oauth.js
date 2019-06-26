@@ -3,9 +3,9 @@ const OpenIDClient = require("../util/tkoauth")
 const TKIssuing = require("../util/tkissuing")
 const TKStore = require("../util/tkstore")
 const Config = require("../config")
-
 const invalidAuth = "Invalid authentication information"
 const invalidReq = "Invalid wallet request"
+const Url = require("url")
 
 const clients = {
   "login": new OpenIDClient(["openid"], "login"),
@@ -32,7 +32,6 @@ let genRoute = flow => async(req, res) => {
   if (flow === 'issue') {
     claims = {userinfo: {'https://auth.trustedkey.com/publicKey':{essential:true}}}
   }
-  
   // eslint-disable-next-line security/detect-object-injection
   const url = await clients[flow].getAuthUri(req.query, claims)
   return res.redirect(url)
@@ -98,7 +97,44 @@ let callback = async(req, res) => {
       let publicKey = userInfo['https://auth.trustedkey.com/publicKey']
       // eslint-disable-next-line no-console
       console.log("Got Public key: ", publicKey)
-      const status = await TKIssuing.issue(publicKey, Config.issuanceClaims)
+      const claimsRequest = await OpenIDClient.getClaimRequest(req)
+      var issuanceClaims = {}
+      if (Object.keys(claimsRequest).length === 0) { // all Claims
+        issuanceClaims = Config.issuanceClaims
+      } else { // individual Claim
+        // always pointing to same docRef
+        const field = Object.keys(claimsRequest)[0]
+        switch (field) {
+        case 'address':
+          issuanceClaims = {
+            address:{
+              formatted: {
+                endpoint: Url.resolve(Config.host, '/claimdetails'),
+                loa: 1.0
+              },
+            },
+          }
+          break
+        case 'documentId':
+          issuanceClaims = {
+            // eslint-disable-next-line security/detect-object-injection
+            "https://auth.trustedkey.com/docRef": claimsRequest[field]
+          }
+          break
+        case 'club_code':
+          issuanceClaims = {
+            // eslint-disable-next-line security/detect-object-injection
+            "1.2.3.4.5" : claimsRequest[field]
+          }
+          break
+        default:
+          issuanceClaims = claimsRequest
+        }
+        // add docRef
+        issuanceClaims = { "https://auth.trustedkey.com/docRef": "docRef123", ...issuanceClaims }
+      }
+      // issue Claim
+      const status = await TKIssuing.issue(publicKey, issuanceClaims)
       // get Claim
       if (status === true) {
         // eslint-disable-next-line no-constant-condition

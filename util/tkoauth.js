@@ -8,8 +8,11 @@ const clientId = Config.clientId
 const clientSecret = Config.clientSecret
 
 const nonceKeyPrefix = 'nonce-'
+const queryKeyPrefix = 'query-'
 const saveNonce = (key, nonce) => Cache.set(nonceKeyPrefix + key, nonce)
 const getNonce = key => Cache.get(nonceKeyPrefix + key)
+const saveQuery = (key, query) => Cache.set(queryKeyPrefix + key, query)
+const getQuery = key => Cache.get(queryKeyPrefix + key)
 
 // Our discovery endpoint takes a while :)
 Issuer.defaultHttpOptions = { timeout: 3500 }
@@ -37,11 +40,13 @@ class OpenIDClient {
   static getCallbackFlow(req) {
     return req.query.state.split(':')[0]
   }
-
   async getAuthUri(query, claims) {
     const nonce = UUID.v4()
     const id = UUID.v4()
     saveNonce(id, nonce)
+    // eslint-disable-next-line no-unused-vars
+    const { login_hint, ...fields } = query
+    saveQuery(id, fields)
     const client = await getClient()
     return client.authorizationUrl(Object.assign({
       redirect_uri: Url.resolve(Host, Config.callbackRoute),
@@ -59,6 +64,10 @@ class OpenIDClient {
     const nonce = await getNonce(state.split(':')[1])
     const token = await client.authorizationCallback(url, params, {state, nonce, response_type: 'code'})
     return client.userinfo(token.access_token)
+  }
+
+  static async getClaimRequest(req) {
+    return await getQuery(req.query.state.split(':')[1])
   }
 }
 

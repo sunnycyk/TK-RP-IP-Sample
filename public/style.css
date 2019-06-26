@@ -18,3 +18,18 @@ table td {
 #select-claims {
     padding: 10px 5px;
 }
+#issuerform {
+    font-size: 12px;
+    padding:15px 5px;
+}
+
+#issuerform > div {
+    margin:10px 10px;
+    display: table-row;
+}
+
+#issuerform > div > input, #issuerform > div > label, #issuerform > div > select {
+    display: table-cell;
+    width: 250px;
+}
+

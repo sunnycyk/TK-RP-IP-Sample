@@ -6,7 +6,7 @@
         <input type="email" placeholder="Email" id="email">
         <button type="button" onclick="doFlow('login')">Login</button>
         <button type="button" onclick="doFlow('register')">Register</button>
-        <button type="button" onclick="doFlow('issue')">Issue</button>
+        <button type="button" id="issuebutton" onclick="showIssuerForm()">Show Issuing Form</button>
         <!-- <button type="button" id="docsigbutton" onclick="displayUploadForm()">Show DocSig Form</button> -->
         <div id="docsigform" hidden>
             <form id="docsig">
@@ -31,6 +31,63 @@
                 <tbody>
                 </tbody>
             </table>
+        </div>
+        <div id="issuerform" hidden>
+            <h4>Issue Sample Claims</h4>
+            <div>
+                <button onclick="doFlow('issue')">Issue All</button>
+            </div>
+            <br>
+            <div> -------------------- OR --------------------</div>
+            <h4>Issue Individual Claim from Sample Claims</h4>
+            <div>
+                <label for="docRef">Document Refeence No. (Fixed for sample)</label>
+                <input type="text" id="docRef" value="docRef123" disabled>
+            </div>
+            <div>
+                <label for="name">Name</label>
+                <input type="text" id="name">
+                <button onclick="doFlow('issue', 'name')">Issue</button>
+            </div>
+            <div>
+                <label for="given_name">Given Name</label>
+                <input type="text" id="given_name">
+                <button onclick="doFlow('issue', 'given_name')">Issue</button>
+            </div>
+            <div>
+                <label for="family_name">Family Name</label>
+                <input type="text" id="family_name">
+                <button onclick="doFlow('issue', 'family_name')">Issue</button>
+            </div>
+            <div>
+                <label for="gender">Gender</label>
+                <select id="gender">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+                <button onclick="doFlow('issue', 'gender')">Issue</button>
+            </div>
+            <div>
+                <label for="birthdate">Birthdate</label>
+                <input type="date" id="birthdate">
+                <button onclick="/[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(document.getElementById('birthdate').value) ? doFlow('issue', 'birthdate') : alert('invalid value')">Issue</button>
+            </div>
+            <div>
+                <label for="address">Address (Distributed claim: Fixed for sample)</label>
+                <input type="text" id="address" disabled>
+                <button onclick="doFlow('issue', 'address')">Issue</button>
+            </div>
+            <div>
+                <label for="documentId">Document ID</label>
+                <input type="text" id="documentId">
+                <button onclick="doFlow('issue', 'documentId')">Issue</button>
+            </div>
+            <div>
+                <label for="club_code">Club Code</label>
+                <input type="text" id="club_code">
+                <button onclick="doFlow('issue', 'club_code')">Issue</button>
+            </div>
+
         </div>
         <script src="/index.js"></script>
     </body>

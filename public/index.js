@@ -1,10 +1,18 @@
 /* eslint-env browser */
 
 // eslint-disable-next-line no-unused-vars
-function doFlow(flow) {
+function doFlow(flow, field) {
   var email = document.getElementById("email").value
+  var query = ''
   email = encodeURIComponent(email.trim())
-  window.location.href = "/" + flow + "?login_hint=" + email
+  // eslint-disable-next-line eqeqeq
+  if (field != null) {
+    var value = document.getElementById(field).value
+    if (value === '') return alert('invalid valid')
+    value = encodeURIComponent(value.trim())
+    query = `&${field}=${value}`
+  }
+  window.location.href = "/" + flow + "?login_hint=" + email + query
 }
 
 function _tr() {
@@ -54,15 +62,41 @@ function _tdDistributedClaim(claimText, dcClaim){
 // eslint-disable-next-line no-unused-vars
 function displayUploadForm() {
   var docsigForm = document.getElementById('docsigform')
+  var issuerForm = document.getElementById('issuerform')
   var claims = document.getElementById('claims')
   var docsigBtn = document.getElementById('docsigbutton')
+  var issuebutton = document.getElementById('issuebutton')
   docsigForm.hidden = !docsigForm.hidden
   if (docsigForm.hidden) {
     docsigBtn.textContent = 'Show Docsig Form'
   } else {
+    issuebutton.textContent = 'Show Issuing Form'
     docsigBtn.textContent = 'Hide Docsig Form'
   }
-  claims.hidden = !claims.hidden
+  claims.hidden = !(issuerForm.hidden && docsigForm.hidden)
+  issuerForm.hidden = true
+}
+
+// eslint-disable-next-line no-unused-vars
+function showIssuerForm() {
+  var docsigForm = document.getElementById('docsigform')
+  var issuerForm = document.getElementById('issuerform')
+  var claims = document.getElementById('claims')
+  var issuebutton = document.getElementById('issuebutton')
+  //var docsigBtn = document.getElementById('docsigbutton')
+  issuerForm.hidden = !issuerForm.hidden
+  if (issuerForm.hidden) {
+    issuebutton.textContent = 'Show Issuing Form'
+  } else {
+    // docsigBtn.textContent = 'Show Docsig Form'
+    issuebutton.textContent = 'Hide Issuing Form'
+  }
+  claims.hidden = !(issuerForm.hidden && docsigForm.hidden)
+  docsigForm.hidden = true
+
+  // prefill address value
+  var address = document.getElementById('address')
+  address.value = window.location.href + '/claimdetails'
 }
 
 // eslint-disable-next-line no-unused-vars
