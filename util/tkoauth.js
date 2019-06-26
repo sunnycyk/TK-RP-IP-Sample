@@ -46,7 +46,7 @@ class OpenIDClient {
     saveNonce(id, nonce)
     // eslint-disable-next-line no-unused-vars
     const { login_hint, ...fields } = query
-    saveQuery(id, fields)
+    saveQuery(id, JSON.stringify(fields))
     const client = await getClient()
     return client.authorizationUrl(Object.assign({
       redirect_uri: Url.resolve(Host, Config.callbackRoute),
@@ -67,7 +67,7 @@ class OpenIDClient {
   }
 
   static async getClaimRequest(req) {
-    return await getQuery(req.query.state.split(':')[1])
+    return getQuery(req.query.state.split(':')[1])
   }
 }
 

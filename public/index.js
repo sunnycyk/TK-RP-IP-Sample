@@ -5,6 +5,7 @@ function doFlow(flow, field) {
   var email = document.getElementById("email").value
   var query = ''
   email = encodeURIComponent(email.trim())
+
   // eslint-disable-next-line eqeqeq
   if (field != null) {
     var value = document.getElementById(field).value

@@ -97,7 +97,7 @@ let callback = async(req, res) => {
       let publicKey = userInfo['https://auth.trustedkey.com/publicKey']
       // eslint-disable-next-line no-console
       console.log("Got Public key: ", publicKey)
-      const claimsRequest = await OpenIDClient.getClaimRequest(req)
+      const claimsRequest = JSON.parse(await OpenIDClient.getClaimRequest(req))
       var issuanceClaims = {}
       if (Object.keys(claimsRequest).length === 0) { // all Claims
         issuanceClaims = Config.issuanceClaims
