@@ -3,6 +3,7 @@ const OpenIDClient = require("../util/tkoauth")
 const TKIssuing = require("../util/tkissuing")
 const TKStore = require("../util/tkstore")
 const Config = require("../config")
+const Utils = require('trustedkey-js/utils')
 const invalidAuth = "Invalid authentication information"
 const invalidReq = "Invalid wallet request"
 const Url = require("url")
@@ -125,6 +126,12 @@ let callback = async(req, res) => {
           issuanceClaims = {
             // eslint-disable-next-line security/detect-object-injection
             "1.2.3.4.5" : claimsRequest[field]
+          }
+          break
+        case 'birthdate':
+          issuanceClaims = {
+             // eslint-disable-next-line security/detect-object-injection
+             "birthdate" : Utils.dateToString(new Date(claimsRequest[field]))
           }
           break
         default:
